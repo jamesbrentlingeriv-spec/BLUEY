@@ -37,62 +37,42 @@
             <img src="../../STORYPICS/CAMPING/BLUECAMP1.png" alt="Camping" class="story-img">
             <p class="story-text">The Heeler family was going camping! Bandit loaded the car with sleeping bags, a tent,
                 and way too many snacks.</p>
-            <!-- No audio for page 1 (bc1.mp3 not specified) -->
         </div>
         <div class="story-page" data-page="2">
             <img src="../../STORYPICS/CAMPING/BLUECAMP2.png" alt="Camping" class="story-img">
             <p class="story-text">Tall trees surrounded them like friendly giants. Bingo hugged a tree and said, 'I
                 think this tree likes me!'</p>
-            <!-- No audio for page 2 (bc2.mp3 not specified) -->
         </div>
         <div class="story-page" data-page="3">
             <img src="../../STORYPICS/CAMPING/BLUECAMP3.png" alt="Camping" class="story-img">
             <p class="story-text">Bandit tried to set up the tent, but it kept falling down. Chilli fixed it in two
                 minutes. 'Mums know best!'</p>
-            <audio controls class="story-audio">
-                <source src="../../storyaudio/camping/bc3.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
         </div>
         <div class="story-page" data-page="4">
             <img src="../../STORYPICS/CAMPING/BLUECAMP4.png" alt="Camping" class="story-img">
             <p class="story-text">They spotted a lizard on a rock. 'What is your name, Mr. Lizard?' asked Bingo. 'I
                 think his name is Gerald.'</p>
-            <audio controls class="story-audio">
-                <source src="../../storyaudio/camping/bc4.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
         </div>
         <div class="story-page" data-page="5">
             <img src="../../STORYPICS/CAMPING/BLUECAMP5.png" alt="Camping" class="story-img">
             <p class="story-text">That night, Bandit told funny stories around the campfire and made shadow puppets with
                 his hands.</p>
-            <audio controls class="story-audio">
-                <source src="../../storyaudio/camping/bc5.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
         </div>
         <div class="story-page" data-page="6">
             <img src="../../STORYPICS/CAMPING/BLUECAMP6.png" alt="Camping" class="story-img">
             <p class="story-text">Bluey saw a shooting star. 'Make a wish!' Chilli whispered. Bluey wished for more
                 adventures with her family.</p>
-            <audio controls class="story-audio">
-                <source src="../../storyaudio/camping/bc6.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
         </div>
         <div class="story-page" data-page="7">
             <img src="../../STORYPICS/CAMPING/BLUECAMP7.png" alt="Camping" class="story-img">
             <p class="story-text">They snuggled in sleeping bags as crickets chirped. 'Goodnight, family,' Bingo
                 murmured. 'Goodnight, Bingo.'</p>
-            <audio controls class="story-audio">
-                <source src="../../storyaudio/camping/bc7.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
         </div>
 
         <div class="read-aloud-bar">
-            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+            <button class="read-aloud-btn" onclick="playCampingAudio()"><i class="fas fa-volume-up"></i> Read
+                Aloud</button>
+            <audio id="camping-audio" src="../../storyaudio/camping/camping.mp3"></audio>
         </div>
 
         <div class="page-nav">
@@ -105,6 +85,15 @@
 
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1350.0.min.js"></script>
     <script src="../../story.js"></script>
+    <script>
+        function playCampingAudio() {
+            var audio = document.getElementById('camping-audio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+    </script>
 </body>
 
 </html>
