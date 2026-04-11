@@ -270,23 +270,30 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
 
       // Camping story: play MP3 for each page if available
       const isCamping = document.title.toLowerCase().includes("camping");
-      if (isCamping && page.dataset.page) {
+      const isBeach = document.title.toLowerCase().includes("beach");
+      if ((isCamping || isBeach) && page.dataset.page) {
         const pageNum = page.dataset.page;
-        // Only play MP3 if file exists for this page (bc1.mp3, bc2.mp3, ...)
-        const mp3 = `../../storyaudio/camping/bc${pageNum}.mp3`;
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
+        let mp3 = null;
+        if (isCamping) {
+          mp3 = `../../storyaudio/camping/bc${pageNum}.mp3`;
+        } else if (isBeach) {
+          mp3 = `../../storyaudio/beach/bb${pageNum}.mp3`;
         }
-        audio = new Audio(mp3);
-        audio.play();
-        readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
-        readBtn.classList.add("stop-btn");
-        audio.onended = function () {
-          readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
-          readBtn.classList.remove("stop-btn");
-        };
-        return;
+        if (mp3) {
+          if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+          }
+          audio = new Audio(mp3);
+          audio.play();
+          readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
+          readBtn.classList.add("stop-btn");
+          audio.onended = function () {
+            readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+            readBtn.classList.remove("stop-btn");
+          };
+          return;
+        }
       }
 
       // Default: Use Amazon Polly for TTS

@@ -17,6 +17,65 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Make all text bolder for readability */
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        .navbar,
+        .hero,
+        .hero-tagline,
+        .badge,
+        .section-title,
+        .story-card,
+        .char-item p,
+        .subtitle,
+        .container,
+        .characters-row,
+        .story-card .card-body,
+        .story-card .tags,
+        .tag,
+        .navbar .brand-text,
+        .navbar .nav-home,
+        .navbar .brand {
+            font-weight: 800 !important;
+        }
+
+        /* White text outline for readability over video background */
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        .navbar,
+        .hero,
+        .hero-tagline,
+        .badge,
+        .section-title,
+        .story-card,
+        .char-item p,
+        .subtitle,
+        .container,
+        .characters-row,
+        .story-card .card-body,
+        .story-card .tags,
+        .tag,
+        .navbar .brand-text,
+        .navbar .nav-home,
+        .navbar .brand {
+            text-shadow:
+                0 0 3px #fff,
+                0 0 6px #fff,
+                0 0 2px #fff;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -296,6 +355,10 @@
 </head>
 
 <body>
+    <!-- Background Image -->
+    <div id="bg-image"
+        style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;background:url('blueyy.png') center center/cover no-repeat;">
+    </div>
     <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="brand">
@@ -322,6 +385,7 @@
             <button id="read-aloud-btn"
                 style="background:#5ba4cf;color:#fff;padding:10px 24px;border:none;border-radius:50px;font-size:1em;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;">🔊
                 Read Aloud</button>
+            <audio id="demo-audio" src="Bluey%20and%20Bingo%20love.mp3"></audio>
         </div>
         <h1>Pick a Story, <span>Mate!</span></h1>
         <p class="subtitle">Blue's World of Stories</p>
@@ -351,7 +415,8 @@
         <h2 class="section-title">🏖️ Family Adventures</h2>
         <div class="story-grid">
             <a href="stories/family-adventures/the-beach.html" class="story-card">
-                <div class="card-img">🏖️</div>
+                <div class="card-img"><img src="STORYPICS/BEACH/bluebeach1.png" alt="The Beach thumbnail"
+                        style="width:100%;height:200px;object-fit:cover;background:#D6EAFF;border-radius:0;"></div>
                 <div class="card-body">
                     <h3>The Beach</h3>
                     <p>The Heelers head to the beach for sandcastles, hermit crabs, and a perfect family sunset.</p>
@@ -525,10 +590,11 @@
             }
         </script>
         <script>
-            // --- Read Aloud Demo with Word Highlighting ---
+            // --- Read Aloud Demo with Word Highlighting and MP3 ---
             (function () {
                 const demoText = document.getElementById('demo-text');
-                if (!demoText) return;
+                const demoAudio = document.getElementById('demo-audio');
+                if (!demoText || !demoAudio) return;
                 // Wrap each word in a span
                 function wrapWords(el) {
                     if (el.dataset.wrapped) return;
@@ -556,46 +622,31 @@
                 document.head.appendChild(style);
 
                 const readBtn = document.getElementById('read-aloud-btn');
-                const synth = window.speechSynthesis;
-                let bestVoice = null;
-                function pickBest() {
-                    const all = synth.getVoices();
-                    const english = all.filter(v => v.lang.startsWith('en'));
-                    bestVoice = english.find(v => v.name.toLowerCase().includes('natural')) || english[0] || null;
-                }
-                synth.onvoiceschanged = pickBest;
-                pickBest();
-
+                let isPlaying = false;
                 function clearHighlights() {
                     demoText.querySelectorAll('.demo-word.demo-highlight').forEach(w => w.classList.remove('demo-highlight'));
                 }
 
                 readBtn.addEventListener('click', function () {
-                    if (synth.speaking) { synth.cancel(); clearHighlights(); return; }
+                    if (isPlaying) {
+                        demoAudio.pause();
+                        demoAudio.currentTime = 0;
+                        clearHighlights();
+                        readBtn.textContent = '🔊 Read Aloud';
+                        isPlaying = false;
+                        return;
+                    }
                     clearHighlights();
-                    const wordSpans = Array.from(demoText.querySelectorAll('.demo-word'));
-                    const fullText = wordSpans.map(w => w.textContent).join('');
-                    let searchFrom = 0;
-                    const wordPositions = wordSpans.map(span => {
-                        const word = span.textContent;
-                        const idx = fullText.indexOf(word, searchFrom);
-                        searchFrom = idx + word.length;
-                        return { start: idx, end: searchFrom, span };
-                    });
-                    const utter = new SpeechSynthesisUtterance(fullText);
-                    utter.voice = bestVoice;
-                    utter.rate = 0.85;
-                    utter.pitch = 1.05;
-                    utter.onboundary = function (event) {
-                        if (event.name === 'word') {
-                            clearHighlights();
-                            const charIdx = event.charIndex;
-                            const match = wordPositions.find(wp => charIdx >= wp.start && charIdx < wp.end);
-                            if (match) match.span.classList.add('demo-highlight');
-                        }
-                    };
-                    utter.onend = function () { clearHighlights(); };
-                    synth.speak(utter);
+                    demoAudio.currentTime = 0;
+                    demoAudio.play();
+                    readBtn.textContent = '⏹ Stop';
+                    isPlaying = true;
+                });
+
+                demoAudio.addEventListener('ended', function () {
+                    clearHighlights();
+                    readBtn.textContent = '🔊 Read Aloud';
+                    isPlaying = false;
                 });
             })();
         </script>
