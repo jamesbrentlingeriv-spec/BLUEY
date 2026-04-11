@@ -30,7 +30,6 @@
     showPage(current);
   };
 
-
   // ── Improved: Wrap every word and punctuation in its own <span class="word"> for accurate TTS highlighting ──
   function wrapWordsInPage(page) {
     const storyText = page.querySelector(".story-text");
