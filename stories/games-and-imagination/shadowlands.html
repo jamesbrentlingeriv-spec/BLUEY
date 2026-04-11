@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadowlands - Bluey's Word Witness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../story.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="brand">
+            <div class="brand-icon"><i class="fas fa-book-open"></i></div>
+            <div class="brand-text">Bluey's <span>Word Witness</span></div>
+        </a>
+        <a href="../../index.html" class="nav-home"><i class="fas fa-home"></i></a>
+    </nav>
+
+    <div class="banner">🌑</div>
+
+    <div class="story-container">
+        <h1 class="story-title">SHADOWLANDS</h1>
+        <div class="characters">
+            <img src="../../Bluey.png" alt="Bluey" class="char-avatar">
+            <img src="../../BINGO.png" alt="Bingo" class="char-avatar">
+            <img src="../../BANDIT.png" alt="Bandit" class="char-avatar">
+            <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit</span>
+        </div>
+
+        <div class="story-page active" data-page="1">
+            <p class="story-text">"Late in the afternoon, the shadows grew long in the garden. 'Welcome to the
+                Shadowlands!' Bluey declared."</p>
+        </div>
+        <div class="story-page" data-page="2">
+            <p class="story-text">"You could only move by stepping on shadows. If you stepped on sunny ground, you were
+                out!"</p>
+        </div>
+        <div class="story-page" data-page="3">
+            <p class="story-text">"'There is a dragon over there!' Bluey pointed at a big tree shadow. Its branches
+                looked like claws reaching out."</p>
+        </div>
+        <div class="story-page" data-page="4">
+            <p class="story-text">"Bingo crept along the garden bed shadow. 'I will distract the dragon!' she whispered
+                bravely."</p>
+        </div>
+        <div class="story-page" data-page="5">
+            <p class="story-text">"Bandit got stuck—his shadow was shrinking! Bluey threw a blanket down to make a new
+                shadow bridge. 'Rescued!'"</p>
+        </div>
+        <div class="story-page" data-page="6">
+            <p class="story-text">"They reached the Shadow Castle. 'We conquered the Shadowlands!' Bluey cheered.
+                'Shadow heroes!' Bingo raised her paw."</p>
+        </div>
+        <div class="story-page" data-page="7">
+            <p class="story-text">"As the sun set and shadows faded, Chilli called them for dinner. 'Same time
+                tomorrow?' The Shadowlands would wait."</p>
+        </div>
+
+        <div class="read-aloud-bar">
+            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+        </div>
+
+        <div class="page-nav">
+            <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
+            <div class="dots"></div>
+            <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="../../story.js"></script>
+</body>
+
+</html>

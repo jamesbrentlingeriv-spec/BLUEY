@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camping - Bluey's Word Witness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../story.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="brand">
+            <div class="brand-icon"><i class="fas fa-book-open"></i></div>
+            <div class="brand-text">Bluey's <span>Word Witness</span></div>
+        </a>
+        <a href="../../index.html" class="nav-home"><i class="fas fa-home"></i></a>
+    </nav>
+
+    <div class="banner">⛺</div>
+
+    <div class="story-container">
+        <h1 class="story-title">CAMPING</h1>
+        <div class="characters">
+            <img src="../../Bluey.png" alt="Bluey" class="char-avatar">
+            <img src="../../BINGO.png" alt="Bingo" class="char-avatar">
+            <img src="../../BANDIT.png" alt="Bandit" class="char-avatar">
+            <img src="../../Chilli.png" alt="Chilli" class="char-avatar">
+            <video class="char-avatar" src="../../BLUEYREAD.mp4" alt="Bluey Reading" title="Bluey Reading" autoplay loop
+                muted playsinline style="width:40px;height:40px;object-fit:cover;border-radius:50%"></video>
+            <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit, Chilli</span>
+        </div>
+
+        <div class="story-page active" data-page="1">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP1.png" alt="Camping" class="story-img">
+            <p class="story-text">The Heeler family was going camping! Bandit loaded the car with sleeping bags, a tent,
+                and way too many snacks.</p>
+        </div>
+        <div class="story-page" data-page="2">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP2.png" alt="Camping" class="story-img">
+            <p class="story-text">Tall trees surrounded them like friendly giants. Bingo hugged a tree and said, 'I
+                think this tree likes me!'</p>
+        </div>
+        <div class="story-page" data-page="3">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP3.png" alt="Camping" class="story-img">
+            <p class="story-text">Bandit tried to set up the tent, but it kept falling down. Chilli fixed it in two
+                minutes. 'Mums know best!'</p>
+        </div>
+        <div class="story-page" data-page="4">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP4.png" alt="Camping" class="story-img">
+            <p class="story-text">They spotted a lizard on a rock. 'What is your name, Mr. Lizard?' asked Bingo. 'I
+                think his name is Gerald.'</p>
+        </div>
+        <div class="story-page" data-page="5">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP5.png" alt="Camping" class="story-img">
+            <p class="story-text">That night, Bandit told funny stories around the campfire and made shadow puppets with
+                his hands.</p>
+        </div>
+        <div class="story-page" data-page="6">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP6.png" alt="Camping" class="story-img">
+            <p class="story-text">Bluey saw a shooting star. 'Make a wish!' Chilli whispered. Bluey wished for more
+                adventures with her family.</p>
+        </div>
+        <div class="story-page" data-page="7">
+            <img src="../../STORYPICS/CAMPING/BLUECAMP7.png" alt="Camping" class="story-img">
+            <p class="story-text">They snuggled in sleeping bags as crickets chirped. 'Goodnight, family,' Bingo
+                murmured. 'Goodnight, Bingo.'</p>
+        </div>
+
+        <div class="read-aloud-bar">
+            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+        </div>
+
+        <div class="page-nav">
+            <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
+            <div class="dots"></div>
+            <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="../../story.js"></script>
+</body>
+
+</html>

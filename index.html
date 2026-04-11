@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#5BA4CF">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Reading Buddies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #6EC1E4;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 30px;
+            background: #fff;
+            border-bottom: 3px solid #5BA4CF;
+        }
+
+        .navbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .navbar .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: #C8DFF5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B7DD8;
+            font-size: 1.3em;
+        }
+
+        .navbar .brand-text {
+            font-size: 1.35em;
+            font-weight: 800;
+            color: #1E3A5F;
+        }
+
+        .navbar .brand-text span {
+            color: #5BA4CF;
+        }
+
+        .navbar .nav-home {
+            color: #5BA4CF;
+            font-size: 1.4em;
+            text-decoration: none;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .hero-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero .family-img {
+            max-width: 420px;
+            width: 100%;
+            border-radius: 18px;
+        }
+
+        .hero-tagline {
+            font-family: 'Nunito', sans-serif;
+            font-size: 4em;
+            font-weight: 800;
+            color: #fff;
+            text-shadow:
+                3px 3px 0 #3B7DD8,
+                -1px -1px 0 #3B7DD8,
+                1px -1px 0 #3B7DD8,
+                -1px 1px 0 #3B7DD8,
+                0 4px 8px rgba(30, 58, 95, 0.3);
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #D6EAFF;
+            color: #3B7DD8;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #1E3A5F;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 span {
+            color: #5BA4CF;
+        }
+
+        .hero .subtitle {
+            font-size: 1.15em;
+            color: #7A8FA6;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* ── Characters Row ── */
+        .characters-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .char-item {
+            text-align: center;
+        }
+
+        .char-item img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #fff;
+            padding: 6px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .char-item p {
+            margin-top: 6px;
+            font-weight: 700;
+            font-size: 0.85em;
+            color: #1E3A5F;
+        }
+
+        /* ── Container ── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+        }
+
+        .section-title {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #1E3A5F;
+            text-align: center;
+            margin: 40px 0 24px;
+        }
+
+        /* ── Story Cards ── */
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .story-card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: transform 0.25s, box-shadow 0.25s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .story-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        .story-card .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #D6EAFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            color: #5BA4CF;
+        }
+
+        .story-card .card-body {
+            padding: 18px 20px 16px;
+            flex: 1;
+        }
+
+        .story-card .card-body h3 {
+            font-size: 1.25em;
+            font-weight: 800;
+            color: #1E3A5F;
+            margin-bottom: 8px;
+        }
+
+        .story-card .card-body p {
+            font-size: 0.95em;
+            color: #7A8FA6;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .story-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px 16px;
+        }
+
+        .tag {
+            background: #EBF2FA;
+            color: #3B7DD8;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.78em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #7A8FA6;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .hero-tagline {
+                font-size: 2.5em;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .characters-row {
+                gap: 16px;
+            }
+
+            .char-item img {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="brand">
+            <div class="brand-icon"><img src="BLUEREAD.png" alt="Reading Buddies Logo"
+                    style="width:38px;height:38px;object-fit:contain;border-radius:50%;background:#c8dff5;"></div>
+            <div class="brand-text">Reading <span>Buddies</span></div>
+        </a>
+        <a href="index.html" class="nav-home"><i class="fas fa-home"></i></a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-banner">
+            <video src="BLUEYREAD.mp4" alt="Bluey Reading" class="family-img" autoplay loop muted playsinline
+                style="max-width:420px;width:100%;border-radius:18px;object-fit:cover;display:block;"></video>
+            <div class="hero-tagline">Bluey,<br>Let's Read!</div>
+        </div>
+        <div class="badge"><i class="fas fa-sparkles"></i> New Stories Added!</div>
+        <!-- Read Aloud Demo -->
+        <div id="read-aloud-demo" style="margin:32px auto 0;max-width:600px;text-align:center;">
+            <div id="demo-text" style="font-size:1.25em;line-height:1.7;margin-bottom:12px;">
+                Bluey and Bingo love reading stories together under the big gum tree.
+            </div>
+            <button id="read-aloud-btn"
+                style="background:#5ba4cf;color:#fff;padding:10px 24px;border:none;border-radius:50px;font-size:1em;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;">🔊
+                Read Aloud</button>
+        </div>
+        <h1>Pick a Story, <span>Mate!</span></h1>
+        <p class="subtitle">Blue's World of Stories</p>
+
+        <div class="characters-row">
+            <div class="char-item">
+                <img src="Bluey.png" alt="Bluey">
+                <p>Bluey</p>
+            </div>
+            <div class="char-item">
+                <img src="BINGO.png" alt="Bingo">
+                <p>Bingo</p>
+            </div>
+            <div class="char-item">
+                <img src="BANDIT.png" alt="Bandit">
+                <p>Bandit</p>
+            </div>
+            <div class="char-item">
+                <img src="Chilli.png" alt="Chilli">
+                <p>Chilli</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Family Adventures -->
+        <h2 class="section-title">🏖️ Family Adventures</h2>
+        <div class="story-grid">
+            <a href="stories/family-adventures/the-beach.html" class="story-card">
+                <div class="card-img">🏖️</div>
+                <div class="card-body">
+                    <h3>The Beach</h3>
+                    <p>The Heelers head to the beach for sandcastles, hermit crabs, and a perfect family sunset.</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                    <span class="tag">Chilli</span>
+                </div>
+            </a>
+            <a href="stories/family-adventures/camping.html" class="story-card">
+                <div class="card-img"><img src="STORYPICS/CAMPING/BLUECAMP1.png" alt="Camping thumbnail"
+                        style="width:100%;height:200px;object-fit:cover;background:#D6EAFF;border-radius:0;"></div>
+                <div class="card-body">
+                    <h3>Camping</h3>
+                    <p>The family goes camping with campfires, bushwalks, and a wish upon a shooting star.</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                    <span class="tag">Chilli</span>
+                </div>
+            </a>
+            <a href="stories/family-adventures/the-markets.html" class="story-card">
+                <div class="card-img">🛒</div>
+                <div class="card-body">
+                    <h3>The Markets</h3>
+                    <p>Saturday morning at the markets with music, strawberries, and a special gift for Bingo.</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                    <span class="tag">Chilli</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Games & Imagination -->
+        <h2 class="section-title">🎈 Games &amp; Imagination</h2>
+        <div class="story-grid">
+            <a href="stories/games-and-imagination/keepy-uppy.html" class="story-card">
+                <div class="card-img">🎈</div>
+                <div class="card-body">
+                    <h3>Keepy Uppy</h3>
+                    <p>Help Bluey, Bingo, and Dad keep the balloon in the air. Don't let it touch the ground!</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                </div>
+            </a>
+            <a href="stories/games-and-imagination/magic-xylophone.html" class="story-card">
+                <div class="card-img">🎵</div>
+                <div class="card-body">
+                    <h3>Magic Xylophone</h3>
+                    <p>Bluey finds a xylophone that freezes everyone. One tap and you're a statue!</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                    <span class="tag">Chilli</span>
+                </div>
+            </a>
+            <a href="stories/games-and-imagination/shadowlands.html" class="story-card">
+                <div class="card-img">🌑</div>
+                <div class="card-body">
+                    <h3>Shadowlands</h3>
+                    <p>Step only on shadows to cross the garden. Watch out for the shadow dragon!</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Life Lessons -->
+        <h2 class="section-title">💛 Life Lessons</h2>
+        <div class="story-grid">
+            <a href="stories/life-lessons/patience.html" class="story-card">
+                <div class="card-img">🌻</div>
+                <div class="card-body">
+                    <h3>Patience</h3>
+                    <p>Bluey plants a seed and learns that the best things in life are worth waiting for.</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                </div>
+            </a>
+            <a href="stories/life-lessons/sharing.html" class="story-card">
+                <div class="card-img">🤝</div>
+                <div class="card-body">
+                    <h3>Sharing</h3>
+                    <p>Bluey gets a new toy but discovers it's way more fun when you share with your sister.</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                </div>
+            </a>
+            <a href="stories/life-lessons/teamwork.html" class="story-card">
+                <div class="card-img">⭐</div>
+                <div class="card-body">
+                    <h3>Teamwork</h3>
+                    <p>Building the ultimate cubby house is impossible alone, but together the Heelers can do anything.
+                    </p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Bluey</span>
+                    <span class="tag">Bingo</span>
+                    <span class="tag">Bandit</span>
+                    <span class="tag">Chilli</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>🐾 Bluey's Word Witness &mdash; Fun Reading Adventures for Kids</p>
+        <div id="pwa-install-prompt"
+            style="display:none;position:fixed;bottom:24px;left:0;right:0;margin:auto;max-width:340px;background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(30,58,95,0.13);padding:22px 18px 18px 18px;text-align:center;z-index:10000;">
+            <div style="font-size:1.2em;font-weight:700;color:#1e3a5f;margin-bottom:10px;">Install Reading Buddies?
+            </div>
+            <div style="font-size:1em;color:#7a8fa6;margin-bottom:16px;">Add this app to your home screen for the best
+                experience!</div>
+            <button id="pwa-install-btn"
+                style="background:#5ba4cf;color:#fff;padding:10px 28px;border:none;border-radius:50px;font-size:1em;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;">Install
+                App</button>
+            <button id="pwa-install-close"
+                style="background:none;border:none;color:#7a8fa6;font-size:1.2em;margin-left:12px;vertical-align:middle;cursor:pointer;">✕</button>
+        </div>
+        <script>
+            // Custom PWA install prompt
+            let deferredPrompt;
+            const promptDiv = document.getElementById('pwa-install-prompt');
+            const installBtn = document.getElementById('pwa-install-btn');
+            const closeBtn = document.getElementById('pwa-install-close');
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                promptDiv.style.display = 'block';
+            });
+            if (closeBtn) closeBtn.onclick = () => { promptDiv.style.display = 'none'; };
+            if (installBtn) installBtn.onclick = async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        promptDiv.style.display = 'none';
+                    }
+                }
+            };
+            // Hide prompt if already installed
+            window.addEventListener('appinstalled', () => { promptDiv.style.display = 'none'; });
+        </script>
+        <script>
+            // Register service worker for PWA
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register('service-worker.js');
+                });
+            }
+        </script>
+        <script>
+            // --- Read Aloud Demo with Word Highlighting ---
+            (function () {
+                const demoText = document.getElementById('demo-text');
+                if (!demoText) return;
+                // Wrap each word in a span
+                function wrapWords(el) {
+                    if (el.dataset.wrapped) return;
+                    const text = el.textContent;
+                    const parts = text.split(/(\s+)/g);
+                    el.innerHTML = '';
+                    parts.forEach(part => {
+                        if (/\S/.test(part)) {
+                            const span = document.createElement('span');
+                            span.className = 'demo-word';
+                            span.textContent = part;
+                            el.appendChild(span);
+                        } else {
+                            el.appendChild(document.createTextNode(part));
+                        }
+                    });
+                    el.dataset.wrapped = 'true';
+                }
+                wrapWords(demoText);
+
+                // Add highlight style
+                const style = document.createElement('style');
+                style.textContent = `.demo-word { transition: background 0.15s, color 0.15s; border-radius:4px; padding:1px 2px; }
+                    .demo-word.demo-highlight { background: #5ba4cf; color: #fff; }`;
+                document.head.appendChild(style);
+
+                const readBtn = document.getElementById('read-aloud-btn');
+                const synth = window.speechSynthesis;
+                let bestVoice = null;
+                function pickBest() {
+                    const all = synth.getVoices();
+                    const english = all.filter(v => v.lang.startsWith('en'));
+                    bestVoice = english.find(v => v.name.toLowerCase().includes('natural')) || english[0] || null;
+                }
+                synth.onvoiceschanged = pickBest;
+                pickBest();
+
+                function clearHighlights() {
+                    demoText.querySelectorAll('.demo-word.demo-highlight').forEach(w => w.classList.remove('demo-highlight'));
+                }
+
+                readBtn.addEventListener('click', function () {
+                    if (synth.speaking) { synth.cancel(); clearHighlights(); return; }
+                    clearHighlights();
+                    const wordSpans = Array.from(demoText.querySelectorAll('.demo-word'));
+                    const fullText = wordSpans.map(w => w.textContent).join('');
+                    let searchFrom = 0;
+                    const wordPositions = wordSpans.map(span => {
+                        const word = span.textContent;
+                        const idx = fullText.indexOf(word, searchFrom);
+                        searchFrom = idx + word.length;
+                        return { start: idx, end: searchFrom, span };
+                    });
+                    const utter = new SpeechSynthesisUtterance(fullText);
+                    utter.voice = bestVoice;
+                    utter.rate = 0.85;
+                    utter.pitch = 1.05;
+                    utter.onboundary = function (event) {
+                        if (event.name === 'word') {
+                            clearHighlights();
+                            const charIdx = event.charIndex;
+                            const match = wordPositions.find(wp => charIdx >= wp.start && charIdx < wp.end);
+                            if (match) match.span.classList.add('demo-highlight');
+                        }
+                    };
+                    utter.onend = function () { clearHighlights(); };
+                    synth.speak(utter);
+                });
+            })();
+        </script>
+    </footer>
+</body>
+
+</html>

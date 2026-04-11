@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patience - Bluey's Word Witness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../story.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="brand">
+            <div class="brand-icon"><i class="fas fa-book-open"></i></div>
+            <div class="brand-text">Bluey's <span>Word Witness</span></div>
+        </a>
+        <a href="../../index.html" class="nav-home"><i class="fas fa-home"></i></a>
+    </nav>
+
+    <div class="banner">🌻</div>
+
+    <div class="story-container">
+        <h1 class="story-title">PATIENCE</h1>
+        <div class="characters">
+            <img src="../../Bluey.png" alt="Bluey" class="char-avatar">
+            <img src="../../BINGO.png" alt="Bingo" class="char-avatar">
+            <img src="../../BANDIT.png" alt="Bandit" class="char-avatar">
+            <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit</span>
+        </div>
+
+        <div class="story-page active" data-page="1">
+            <p class="story-text">"Bluey planted a seed in a little pot. She watered it carefully and placed it by the
+                window in the sun."</p>
+        </div>
+        <div class="story-page" data-page="2">
+            <p class="story-text">"The next morning—nothing! 'Where is my flower?' she asked. 'Good things need
+                patience,' Chilli explained."</p>
+        </div>
+        <div class="story-page" data-page="3">
+            <p class="story-text">"Bluey checked every hour. She even tried talking to the pot. Bingo sang it a growing
+                song!"</p>
+        </div>
+        <div class="story-page" data-page="4">
+            <p class="story-text">"Days passed. Bluey got busy playing games and going on adventures. She almost forgot
+                about her little seed."</p>
+        </div>
+        <div class="story-page" data-page="5">
+            <p class="story-text">"Then one morning, Bingo shouted, 'Bluey! Come look!' A tiny green sprout poked
+                through the soil."</p>
+        </div>
+        <div class="story-page" data-page="6">
+            <p class="story-text">"Weeks later, a beautiful yellow sunflower opened up, as big as Bluey's face! 'I grew
+                that!' Bluey beamed."</p>
+        </div>
+        <div class="story-page" data-page="7">
+            <p class="story-text">"'The best things in life are worth waiting for,' Bandit smiled. Bluey decided
+                patience was not so bad after all."</p>
+        </div>
+
+        <div class="read-aloud-bar">
+            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+        </div>
+
+        <div class="page-nav">
+            <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
+            <div class="dots"></div>
+            <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="../../story.js"></script>
+</body>
+
+</html>

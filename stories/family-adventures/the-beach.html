@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Beach - Bluey's Word Witness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../story.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="brand">
+            <div class="brand-icon"><i class="fas fa-book-open"></i></div>
+            <div class="brand-text">Bluey's <span>Word Witness</span></div>
+        </a>
+        <a href="../../index.html" class="nav-home"><i class="fas fa-home"></i></a>
+    </nav>
+
+    <div class="banner">🏖️</div>
+
+    <div class="story-container">
+        <h1 class="story-title">THE BEACH</h1>
+        <div class="characters">
+            <img src="../../Bluey.png" alt="Bluey" class="char-avatar">
+            <img src="../../BINGO.png" alt="Bingo" class="char-avatar">
+            <img src="../../BANDIT.png" alt="Bandit" class="char-avatar">
+            <img src="../../Chilli.png" alt="Chilli" class="char-avatar">
+            <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit, Chilli</span>
+        </div>
+
+        <div class="story-page active" data-page="1">
+            <p class="story-text">"It was a beautiful sunny day, and the Heeler family was going to the beach! Bluey and
+                Bingo were so excited."</p>
+        </div>
+        <div class="story-page" data-page="2">
+            <p class="story-text">"They packed towels, sunscreen, and a big blue bucket. 'Last one to the water is a
+                rotten egg!' Bluey shouted."</p>
+        </div>
+        <div class="story-page" data-page="3">
+            <p class="story-text">"Bandit pretended to run in slow motion, making silly faces. Mum set up the umbrella
+                and smiled."</p>
+        </div>
+        <div class="story-page" data-page="4">
+            <p class="story-text">"Bluey found a hermit crab in a rock pool. 'Look, Bingo! He has a tiny house on his
+                back!'"</p>
+        </div>
+        <div class="story-page" data-page="5">
+            <p class="story-text">"They built the biggest sandcastle ever, with towers, a moat, and a little leaf flag.
+                'This is the Heeler castle!'"</p>
+        </div>
+        <div class="story-page" data-page="6">
+            <p class="story-text">"A big wave washed part of it away. 'That is okay,' said Bandit. 'The best part is
+                building it together.'"</p>
+        </div>
+        <div class="story-page" data-page="7">
+            <p class="story-text">"As the sun set, they sat eating watermelon. 'This was the best day ever,' Bluey
+                whispered. And it truly was."</p>
+        </div>
+
+        <div class="read-aloud-bar">
+            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+        </div>
+
+        <div class="page-nav">
+            <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
+            <div class="dots"></div>
+            <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="../../story.js"></script>
+</body>
+
+</html>

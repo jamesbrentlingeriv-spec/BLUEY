@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Markets - Bluey's Word Witness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../story.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="../../index.html" class="brand">
+            <div class="brand-icon"><i class="fas fa-book-open"></i></div>
+            <div class="brand-text">Bluey's <span>Word Witness</span></div>
+        </a>
+        <a href="../../index.html" class="nav-home"><i class="fas fa-home"></i></a>
+    </nav>
+
+    <div class="banner">🛒</div>
+
+    <div class="story-container">
+        <h1 class="story-title">THE MARKETS</h1>
+        <div class="characters">
+            <img src="../../Bluey.png" alt="Bluey" class="char-avatar">
+            <img src="../../BINGO.png" alt="Bingo" class="char-avatar">
+            <img src="../../BANDIT.png" alt="Bandit" class="char-avatar">
+            <img src="../../Chilli.png" alt="Chilli" class="char-avatar">
+            <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit, Chilli</span>
+        </div>
+
+        <div class="story-page active" data-page="1">
+            <p class="story-text">"'Who wants to go to the markets?' Chilli asked. Bluey and Bingo both jumped up and
+                down. 'Me! Me! Me!'"</p>
+        </div>
+        <div class="story-page" data-page="2">
+            <p class="story-text">"The markets were full of colours and smells. There were stalls with fresh fruit,
+                flowers, and homemade cupcakes."</p>
+        </div>
+        <div class="story-page" data-page="3">
+            <p class="story-text">"Bingo found a stall selling tiny paintings. 'Would you like to paint your own?' the
+                lady asked. Bingo's eyes went wide."</p>
+        </div>
+        <div class="story-page" data-page="4">
+            <p class="story-text">"Bluey found a man playing guitar and danced along. Bandit did his famous silly dance
+                and other kids joined in!"</p>
+        </div>
+        <div class="story-page" data-page="5">
+            <p class="story-text">"Chilli bought strawberries and flowers. 'Every Saturday should start like this,' she
+                said with a smile."</p>
+        </div>
+        <div class="story-page" data-page="6">
+            <p class="story-text">"Bluey used her pocket money to buy Bingo a wooden butterfly. 'You are the best big
+                sister in the whole world!'"</p>
+        </div>
+        <div class="story-page" data-page="7">
+            <p class="story-text">"Bandit carried two tired puppies on his shoulders all the way home. 'Best markets
+                ever,' Bluey yawned."</p>
+        </div>
+
+        <div class="read-aloud-bar">
+            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+        </div>
+
+        <div class="page-nav">
+            <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
+            <div class="dots"></div>
+            <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script src="../../story.js"></script>
+</body>
+
+</html>
