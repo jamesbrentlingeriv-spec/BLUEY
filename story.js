@@ -1,4 +1,37 @@
 // Bluey's Word Witness – Story page pagination + read-aloud with word highlighting
+// --- Amazon Polly TTS Setup ---
+// Insert your AWS credentials below
+AWS.config.region = "us-east-1"; // e.g., us-east-1
+AWS.config.credentials = new AWS.Credentials({
+  accessKeyId: "AKIAWIHEAA6MWD2VZK55",
+  secretAccessKey: "44QBbhjLbRakuLYsETJAB2kFdVphNm2F9S9adjPw",
+});
+const polly = new AWS.Polly();
+
+function playPolly(text, voiceId = "Joanna", onEnd) {
+  const params = {
+    OutputFormat: "mp3",
+    Text: text,
+    VoiceId: voiceId, // e.g., Joanna, Ivy, Matthew, etc.
+  };
+  polly.synthesizeSpeech(params, function (err, data) {
+    if (err) {
+      alert("Polly error: " + err.message);
+      if (onEnd) onEnd();
+      return;
+    }
+    if (data && data.AudioStream instanceof Blob === false) {
+      const uInt8Array = new Uint8Array(data.AudioStream);
+      const arrayBuffer = uInt8Array.buffer;
+      const blob = new Blob([arrayBuffer]);
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.onended = onEnd || null;
+      audio.play();
+    }
+  });
+}
+
 (function () {
   const pages = document.querySelectorAll(".story-page");
   const dotsContainer = document.querySelector(".dots");
@@ -80,33 +113,55 @@
   const synth = window.speechSynthesis;
   let bestVoice = null;
 
-  const PREFER = [
-    "natural",
-    "online",
-    "google uk english female",
-    "google us english",
-    "samantha",
-    "karen",
-    "daniel",
-    "moira",
-  ];
-
+  // Prefer American female voices for TTS
   function pickBest() {
     const all = synth.getVoices();
-    const english = all.filter((v) => v.lang.startsWith("en"));
-    if (!english.length) return;
-
-    for (const keyword of PREFER) {
-      const match = english.find((v) => v.name.toLowerCase().includes(keyword));
-      if (match) {
-        bestVoice = match;
-        return;
-      }
+    // Prefer US English female voices
+    let usFemales = all.filter(
+      (v) =>
+        v.lang === "en-US" &&
+        /female|woman|samantha|karen|aria|jenny|zira|libby|hazel|fiona/i.test(
+          v.name,
+        ),
+    );
+    if (usFemales.length) {
+      bestVoice = usFemales[0];
+      return;
     }
-    bestVoice =
-      english.find((v) =>
-        /female|woman|fiona|hazel|libby|aria|jenny|zira/i.test(v.name),
-      ) || english[0];
+    // Prefer Google US English
+    let googleUS = all.find((v) =>
+      v.name.toLowerCase().includes("google us english"),
+    );
+    if (googleUS) {
+      bestVoice = googleUS;
+      return;
+    }
+    // Fallback to any en-US voice
+    let anyUS = all.find((v) => v.lang === "en-US");
+    if (anyUS) {
+      bestVoice = anyUS;
+      return;
+    }
+    // Fallback to any English female
+    let enFemales = all.filter(
+      (v) =>
+        v.lang.startsWith("en") &&
+        /female|woman|samantha|karen|aria|jenny|zira|libby|hazel|fiona/i.test(
+          v.name,
+        ),
+    );
+    if (enFemales.length) {
+      bestVoice = enFemales[0];
+      return;
+    }
+    // Fallback to any English
+    let anyEn = all.find((v) => v.lang.startsWith("en"));
+    if (anyEn) {
+      bestVoice = anyEn;
+      return;
+    }
+    // Fallback to first available
+    bestVoice = all[0] || null;
   }
   synth.onvoiceschanged = pickBest;
   pickBest();
@@ -202,10 +257,15 @@
   bars.forEach(function (bar, pageIdx) {
     const readBtn = bar.querySelector(".read-aloud-btn");
     if (!readBtn) return;
+    let audio = null;
     readBtn.addEventListener("click", function () {
       if (readBtn.classList.contains("stop-btn")) {
         synth.cancel();
         clearHighlights();
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
         readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
         readBtn.classList.remove("stop-btn");
         return;
@@ -218,41 +278,32 @@
       const wordSpans = Array.from(storyTextEl.querySelectorAll(".word"));
       const fullText = storyTextEl.textContent;
 
-      // Build a map from character index → word span
-      var searchFrom = 0;
-      const wordPositions = wordSpans.map(function (span) {
-        const word = span.textContent;
-        const idx = fullText.indexOf(word, searchFrom);
-        searchFrom = idx + word.length;
-        return { start: idx, end: searchFrom, span: span };
-      });
-
-      const utterance = new SpeechSynthesisUtterance(fullText);
-      utterance.voice = bestVoice;
-      utterance.rate = 0.85;
-      utterance.pitch = 1.05;
-
-      // Highlight each word as it's spoken
-      utterance.onboundary = function (event) {
-        if (event.name === "word") {
-          clearHighlights();
-          const charIdx = event.charIndex;
-          var match = wordPositions.find(function (wp) {
-            return charIdx >= wp.start && charIdx < wp.end;
-          });
-          if (match) {
-            match.span.classList.add("highlight");
-          }
+      // Camping story, page 1: play MP3 instead of TTS
+      const isCamping = document.title.toLowerCase().includes("camping");
+      const isFirstPage =
+        page.classList.contains("active") && page.dataset.page == "1";
+      if (isCamping && isFirstPage) {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
         }
-      };
+        audio = new Audio("../../storyaudio/camping/bc1.mp3");
+        audio.play();
+        readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
+        readBtn.classList.add("stop-btn");
+        audio.onended = function () {
+          readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+          readBtn.classList.remove("stop-btn");
+        };
+        return;
+      }
 
-      utterance.onend = function () {
+      // Default: Use Amazon Polly for TTS
+      playPolly(fullText, "Joanna", function () {
         clearHighlights();
         readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
         readBtn.classList.remove("stop-btn");
-      };
-
-      synth.speak(utterance);
+      });
       readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
       readBtn.classList.add("stop-btn");
     });
