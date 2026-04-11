@@ -268,16 +268,21 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       const wordSpans = Array.from(storyTextEl.querySelectorAll(".word"));
       const fullText = storyTextEl.textContent;
 
-      // Camping story, page 1: play MP3 instead of TTS
+      // Camping story, page 1 or 2: play MP3 instead of TTS
       const isCamping = document.title.toLowerCase().includes("camping");
       const isFirstPage =
         page.classList.contains("active") && page.dataset.page == "1";
-      if (isCamping && isFirstPage) {
+      const isSecondPage =
+        page.classList.contains("active") && page.dataset.page == "2";
+      if (isCamping && (isFirstPage || isSecondPage)) {
         if (audio) {
           audio.pause();
           audio.currentTime = 0;
         }
-        audio = new Audio("../../storyaudio/camping/bc1.mp3");
+        const mp3 = isFirstPage
+          ? "../../storyaudio/camping/bc1.mp3"
+          : "../../storyaudio/camping/bc2.mp3";
+        audio = new Audio(mp3);
         audio.play();
         readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
         readBtn.classList.add("stop-btn");
