@@ -174,6 +174,7 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
   }
 
   // ── Click any word to hear it spoken ──
+
   document.addEventListener("click", function (e) {
     const wordSpan = e.target.closest(".word");
     if (!wordSpan) return;
@@ -187,19 +188,13 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       .querySelectorAll(".letter-highlight")
       .forEach((l) => l.classList.remove("letter-highlight"));
 
-    // Speak the word first
+    // Speak the word first using Polly
     wordSpan.classList.add("word-clicked");
-    const utter = new SpeechSynthesisUtterance(clean);
-    utter.voice = bestVoice;
-    utter.rate = 0.85;
-    utter.pitch = 1.05;
-    synth.speak(utter);
-
-    utter.onend = function () {
+    playPolly(clean, "Joanna", function () {
       wordSpan.classList.remove("word-clicked");
       // Now spell the word, highlighting each letter
       spellWordWithHighlight(wordSpan, clean);
-    };
+    });
   });
 
   function spellWordWithHighlight(wordSpan, word) {
@@ -234,16 +229,11 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       if (idx >= letterSpans.length) return;
       const letter = letterSpans[idx].textContent;
       letterSpans[idx].classList.add("letter-highlight");
-      const utter = new SpeechSynthesisUtterance(letter);
-      utter.voice = bestVoice;
-      utter.rate = 0.7;
-      utter.pitch = 1.1;
-      synth.speak(utter);
-      utter.onend = function () {
+      playPolly(letter, "Joanna", function () {
         letterSpans[idx].classList.remove("letter-highlight");
         idx++;
         speakNextLetter();
-      };
+      });
     }
     speakNextLetter();
   }
