@@ -5,22 +5,27 @@
   const totalPages = pages.length;
   let current = 0;
 
-  // Build dots
-  for (let i = 0; i < totalPages; i++) {
-    const dot = document.createElement("div");
-    dot.className = "dot" + (i === 0 ? " active" : "");
-    dotsContainer.appendChild(dot);
+  // Build dots only if container exists
+  let dots = [];
+  if (dotsContainer) {
+    for (let i = 0; i < totalPages; i++) {
+      const dot = document.createElement("div");
+      dot.className = "dot" + (i === 0 ? " active" : "");
+      dotsContainer.appendChild(dot);
+    }
+    dots = dotsContainer.querySelectorAll(".dot");
   }
-  const dots = dotsContainer.querySelectorAll(".dot");
 
   function showPage(index) {
     pages.forEach((p) => p.classList.remove("active"));
-    dots.forEach((d) => d.classList.remove("active"));
+    if (dots.length) dots.forEach((d) => d.classList.remove("active"));
     pages[index].classList.add("active");
-    dots[index].classList.add("active");
+    if (dots.length) dots[index].classList.add("active");
 
-    document.querySelector(".btn-back").disabled = index === 0;
-    document.querySelector(".btn-next").disabled = index === totalPages - 1;
+    const btnBack = document.querySelector(".btn-back");
+    const btnNext = document.querySelector(".btn-next");
+    if (btnBack) btnBack.disabled = index === 0;
+    if (btnNext) btnNext.disabled = index === totalPages - 1;
   }
 
   window.changePage = function (dir) {
@@ -122,19 +127,77 @@
     const clean = wordSpan.textContent.replace(/[^a-zA-Z'-]/g, "");
     if (!clean) return;
 
-    wordSpan.classList.add("word-clicked");
-    setTimeout(function () {
-      wordSpan.classList.remove("word-clicked");
-    }, 500);
+    // Remove any previous letter highlights
+    wordSpan
+      .querySelectorAll(".letter-highlight")
+      .forEach((l) => l.classList.remove("letter-highlight"));
 
+    // Speak the word first
+    wordSpan.classList.add("word-clicked");
     const utter = new SpeechSynthesisUtterance(clean);
     utter.voice = bestVoice;
     utter.rate = 0.85;
     utter.pitch = 1.05;
     synth.speak(utter);
+
+    utter.onend = function () {
+      wordSpan.classList.remove("word-clicked");
+      // Now spell the word, highlighting each letter
+      spellWordWithHighlight(wordSpan, clean);
+    };
   });
 
+  function spellWordWithHighlight(wordSpan, word) {
+    // Remove any previous letter highlights
+    wordSpan
+      .querySelectorAll(".letter-highlight")
+      .forEach((l) => l.classList.remove("letter-highlight"));
+
+    // Wrap each letter in a span if not already
+    if (!wordSpan.querySelector(".letter")) {
+      const letters = word.split("");
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < letters.length; i++) {
+        const span = document.createElement("span");
+        span.className = "letter";
+        span.textContent = letters[i];
+        frag.appendChild(span);
+      }
+      // Save any trailing punctuation
+      const trailing = wordSpan.textContent.slice(word.length);
+      wordSpan.innerHTML = "";
+      wordSpan.appendChild(frag);
+      if (trailing) wordSpan.appendChild(document.createTextNode(trailing));
+    }
+
+    const letterSpans = wordSpan.querySelectorAll(".letter");
+    let idx = 0;
+
+    function speakNextLetter() {
+      // Remove highlight from all
+      letterSpans.forEach((l) => l.classList.remove("letter-highlight"));
+      if (idx >= letterSpans.length) return;
+      const letter = letterSpans[idx].textContent;
+      letterSpans[idx].classList.add("letter-highlight");
+      const utter = new SpeechSynthesisUtterance(letter);
+      utter.voice = bestVoice;
+      utter.rate = 0.7;
+      utter.pitch = 1.1;
+      synth.speak(utter);
+      utter.onend = function () {
+        letterSpans[idx].classList.remove("letter-highlight");
+        idx++;
+        speakNextLetter();
+      };
+    }
+    speakNextLetter();
+  }
+
   // ── Read-aloud bar with word-level highlighting for all story pages ──
+  // Letter highlight style
+  const style = document.createElement("style");
+  style.textContent = `.letter-highlight { background: #5ba4cf !important; color: #fff !important; border-radius: 2px; }`;
+  document.head.appendChild(style);
   const bars = document.querySelectorAll(".read-aloud-bar");
   bars.forEach(function (bar, pageIdx) {
     const readBtn = bar.querySelector(".read-aloud-btn");
