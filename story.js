@@ -13,6 +13,7 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
     OutputFormat: "mp3",
     Text: text,
     VoiceId: voiceId, // e.g., Joanna, Ivy, Matthew, etc.
+    Engine: voiceId === "Olivia" ? "neural" : "standard",
   };
   polly.synthesizeSpeech(params, function (err, data) {
     if (err) {
@@ -188,9 +189,9 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       .querySelectorAll(".letter-highlight")
       .forEach((l) => l.classList.remove("letter-highlight"));
 
-    // Speak the word first using Polly
+    // Speak the word first using Polly (child's female Australian accent)
     wordSpan.classList.add("word-clicked");
-    playPolly(clean, "Joanna", function () {
+    playPolly(clean, "Olivia", function () {
       wordSpan.classList.remove("word-clicked");
       // Now spell the word, highlighting each letter
       spellWordWithHighlight(wordSpan, clean);
@@ -229,7 +230,7 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       if (idx >= letterSpans.length) return;
       const letter = letterSpans[idx].textContent;
       letterSpans[idx].classList.add("letter-highlight");
-      playPolly(letter, "Joanna", function () {
+      playPolly(letter, "Olivia", function () {
         letterSpans[idx].classList.remove("letter-highlight");
         idx++;
         speakNextLetter();
@@ -268,16 +269,19 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       const wordSpans = Array.from(storyTextEl.querySelectorAll(".word"));
       const fullText = storyTextEl.textContent;
 
-      // Camping story: play MP3 for each page if available
+      // Play MP3 for each page if available (Camping, Beach, or Markets)
       const isCamping = document.title.toLowerCase().includes("camping");
       const isBeach = document.title.toLowerCase().includes("beach");
-      if ((isCamping || isBeach) && page.dataset.page) {
+      const isMarkets = document.title.toLowerCase().includes("markets");
+      if ((isCamping || isBeach || isMarkets) && page.dataset.page) {
         const pageNum = page.dataset.page;
         let mp3 = null;
         if (isCamping) {
           mp3 = `../../storyaudio/camping/bc${pageNum}.mp3`;
         } else if (isBeach) {
           mp3 = `../../storyaudio/beach/bb${pageNum}.mp3`;
+        } else if (isMarkets) {
+          mp3 = `../../storyaudio/market/bm${pageNum}.mp3`;
         }
         if (mp3) {
           if (audio) {
