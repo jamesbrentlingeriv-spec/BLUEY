@@ -62,8 +62,7 @@
         <div class="letter-label">Trace the letter: <span id="letter-label">A</span></div>
         <canvas id="tracing-canvas" class="letter-canvas" width="320" height="400"></canvas>
         <button class="next-btn" id="next-btn" style="display:none;">Next Letter</button>
-        <video id="success-video" class="success-video" width="220" height="140" src="blueyspell.mp4"
-            preload="auto"></video>
+        <video id="success-video" class="success-video" width="220" height="140" src="woo.mp4" preload="auto"></video>
     </div>
     <script>
         // Alphabet
@@ -76,7 +75,7 @@
         const nextBtn = document.getElementById('next-btn');
         const successVideo = document.getElementById('success-video');
         // Video sources to cycle through
-        const successVideos = ["blueyspell.mp4", "woo.mp4"];
+        const successVideos = ["woo.mp4", "correct.mp4"];
         let successVideoIndex = 0;
 
         // Draw dotted letter
