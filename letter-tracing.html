@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluey Letter Tracing</title>
+    <link rel="stylesheet" href="story.css">
+    <style>
+        body {
+            background: #eaf6ff;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .tracing-container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 24px 0;
+            text-align: center;
+        }
+
+        .letter-canvas {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #b3d6f7;
+            touch-action: none;
+        }
+
+        .letter-label {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #3b7dd8;
+            margin: 18px 0 8px;
+        }
+
+        .next-btn {
+            margin-top: 18px;
+            font-size: 1.1em;
+            background: #5ba4cf;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-weight: 700;
+        }
+
+        .next-btn:active {
+            background: #3b7dd8;
+        }
+
+        .success-video {
+            display: none;
+            margin: 18px auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #b3d6f7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tracing-container">
+        <div class="letter-label">Trace the letter: <span id="letter-label">A</span></div>
+        <canvas id="tracing-canvas" class="letter-canvas" width="320" height="400"></canvas>
+        <button class="next-btn" id="next-btn" style="display:none;">Next Letter</button>
+        <video id="success-video" class="success-video" width="220" height="140" src="blueywrite.mp4"
+            preload="auto"></video>
+    </div>
+    <script>
+        // Alphabet
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        let currentIndex = 0;
+        let isTracing = false, hasTraced = false;
+        const canvas = document.getElementById('tracing-canvas');
+        const ctx = canvas.getContext('2d');
+        const letterLabel = document.getElementById('letter-label');
+        const nextBtn = document.getElementById('next-btn');
+        const successVideo = document.getElementById('success-video');
+
+        // Draw dotted letter
+        function drawDottedLetter(letter) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.lineWidth = 7;
+            ctx.setLineDash([10, 18]);
+            ctx.strokeStyle = '#b3b3b3';
+            ctx.font = 'bold 240px Nunito, Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.strokeText(letter, canvas.width / 2, canvas.height / 2 + 20);
+            ctx.restore();
+        }
+
+        // Draw user trace
+        let tracePoints = [];
+        function startTrace(x, y) {
+            isTracing = true;
+            tracePoints = [[x, y]];
+        }
+        function continueTrace(x, y) {
+            if (!isTracing) return;
+            tracePoints.push([x, y]);
+            ctx.save();
+            ctx.setLineDash([]);
+            ctx.strokeStyle = '#3b7dd8';
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            const [sx, sy] = tracePoints[tracePoints.length - 2];
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.restore();
+        }
+        function endTrace() {
+            isTracing = false;
+            // Check if enough of the letter was traced (simple: enough points)
+            if (tracePoints.length > 40) {
+                showSuccess();
+            }
+        }
+
+        // Touch/mouse events
+        function getPos(e) {
+            if (e.touches) {
+                const rect = canvas.getBoundingClientRect();
+                return [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
+            } else {
+                const rect = canvas.getBoundingClientRect();
+                return [e.offsetX, e.offsetY];
+            }
+        }
+        canvas.addEventListener('touchstart', e => {
+            if (hasTraced) return;
+            const [x, y] = getPos(e);
+            startTrace(x, y);
+        });
+        canvas.addEventListener('touchmove', e => {
+            if (!isTracing || hasTraced) return;
+            e.preventDefault();
+            const [x, y] = getPos(e);
+            continueTrace(x, y);
+        }, { passive: false });
+        canvas.addEventListener('touchend', e => {
+            if (hasTraced) return;
+            endTrace();
+        });
+        canvas.addEventListener('mousedown', e => {
+            if (hasTraced) return;
+            startTrace(e.offsetX, e.offsetY);
+        });
+        canvas.addEventListener('mousemove', e => {
+            if (!isTracing || hasTraced) return;
+            continueTrace(e.offsetX, e.offsetY);
+        });
+        canvas.addEventListener('mouseup', e => {
+            if (hasTraced) return;
+            endTrace();
+        });
+        canvas.addEventListener('mouseleave', e => {
+            if (isTracing && !hasTraced) endTrace();
+        });
+
+        // Success logic
+        function showSuccess() {
+            hasTraced = true;
+            nextBtn.style.display = 'inline-block';
+            successVideo.style.display = 'block';
+            successVideo.currentTime = 0;
+            successVideo.play();
+        }
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % letters.length;
+            letterLabel.textContent = letters[currentIndex];
+            hasTraced = false;
+            nextBtn.style.display = 'none';
+            successVideo.style.display = 'none';
+            drawDottedLetter(letters[currentIndex]);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawDottedLetter(letters[currentIndex]);
+        });
+
+        // Init
+        drawDottedLetter(letters[currentIndex]);
+    </script>
+</body>
+
+</html>

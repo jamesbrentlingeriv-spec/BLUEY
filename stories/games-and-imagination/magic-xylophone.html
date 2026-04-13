@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Xylophone - Reading Buddies</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../story.css">
 </head>
@@ -21,7 +23,6 @@
     </nav>
 
     <div class="banner">🎵</div>
-
     <div class="story-container">
         <h1 class="story-title">MAGIC XYLOPHONE</h1>
         <div class="characters">
@@ -31,43 +32,52 @@
             <img src="../../Chilli.png" alt="Chilli" class="char-avatar">
             <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit, Chilli</span>
         </div>
-
         <div class="story-page active" data-page="1">
+            <img class="story-img" src="../../STORYPICS/xylophone/bx1.png" alt="Magic Xylophone Page 1">
+            <audio id="page-audio-1" src="../../storyaudio/xylophone/bx1.mp3"></audio>
             <p class="story-text">"Bluey found a toy xylophone in the playroom. But this was no ordinary xylophone.
                 Bluey decided it was magic!"</p>
         </div>
         <div class="story-page" data-page="2">
+            <img class="story-img" src="../../STORYPICS/xylophone/bx2.png" alt="Magic Xylophone Page 2">
+            <audio id="page-audio-2" src="../../storyaudio/xylophone/bx2.mp3"></audio>
             <p class="story-text">"'When I play a note, you have to freeze!' DING! Bandit froze like a statue, spatula
                 in the air."</p>
         </div>
         <div class="story-page" data-page="3">
+            <img class="story-img" src="../../STORYPICS/xylophone/bx3.png" alt="Magic Xylophone Page 3">
+            <audio id="page-audio-3" src="../../storyaudio/xylophone/bx3.mp3"></audio>
             <p class="story-text">"Bingo tapped the xylophone and froze Chilli mid-yawn with her mouth wide open. They
                 fell over laughing!"</p>
         </div>
         <div class="story-page" data-page="4">
+            <img class="story-img" src="../../STORYPICS/xylophone/bx4.png" alt="Magic Xylophone Page 4">
+            <audio id="page-audio-4" src="../../storyaudio/xylophone/bx4.mp3"></audio>
             <p class="story-text">"Then Bandit got the xylophone. He froze both girls right before they could grab their
                 biscuits. 'Not fair, Dad!'"</p>
         </div>
         <div class="story-page" data-page="5">
+            <img class="story-img" src="../../STORYPICS/xylophone/bx5.png" alt="Magic Xylophone Page 5">
+            <audio id="page-audio-5" src="../../storyaudio/xylophone/bx5.mp3"></audio>
             <p class="story-text">"They played all morning, freezing and unfreezing each other in the silliest
                 positions."</p>
         </div>
         <div class="story-page" data-page="6">
+            <img class="story-img" src="../../STORYPICS/xylophone/bx6.png" alt="Magic Xylophone Page 6">
+            <audio id="page-audio-6" src="../../storyaudio/xylophone/bx6.mp3"></audio>
             <p class="story-text">"Bluey learned that the real magic was not in the xylophone. It was in using your
                 imagination to turn anything into a game!"</p>
         </div>
-
         <div class="read-aloud-bar">
-            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+            <button class="read-aloud-btn" onclick="playCurrentPageAudio()"><i class="fas fa-volume-up"></i> Read
+                Aloud</button>
         </div>
-
         <div class="page-nav">
             <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
             <div class="dots"></div>
             <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
         </div>
     </div>
-
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1350.0.min.js"></script>
     <script src="../../story.js"></script>
 </body>

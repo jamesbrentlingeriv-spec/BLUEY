@@ -51,22 +51,21 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
   }
 
   function showPage(index) {
-    pages.forEach((p) => p.classList.remove("active"));
-    if (dots.length) dots.forEach((d) => d.classList.remove("active"));
-    pages[index].classList.add("active");
-    if (dots.length) dots[index].classList.add("active");
-
+    // Clamp index to valid range
+    if (index < 0) index = 0;
+    if (index >= totalPages) index = totalPages - 1;
+    current = index;
+    pages.forEach((p, i) => p.classList.toggle("active", i === current));
+    if (dots.length)
+      dots.forEach((d, i) => d.classList.toggle("active", i === current));
     const btnBack = document.querySelector(".btn-back");
     const btnNext = document.querySelector(".btn-next");
-    if (btnBack) btnBack.disabled = index === 0;
-    if (btnNext) btnNext.disabled = index === totalPages - 1;
+    if (btnBack) btnBack.disabled = current === 0;
+    if (btnNext) btnNext.disabled = current === totalPages - 1;
   }
 
   window.changePage = function (dir) {
-    const next = current + dir;
-    if (next < 0 || next >= totalPages) return;
-    current = next;
-    showPage(current);
+    showPage(current + dir);
   };
 
   // ── Improved: Wrap every word and punctuation in its own <span class="word"> for accurate TTS highlighting ──
@@ -269,35 +268,43 @@ function playPolly(text, voiceId = "Joanna", onEnd) {
       const wordSpans = Array.from(storyTextEl.querySelectorAll(".word"));
       const fullText = storyTextEl.textContent;
 
-      // Play MP3 for each page if available (Camping, Beach, or Markets)
-      const isCamping = document.title.toLowerCase().includes("camping");
-      const isBeach = document.title.toLowerCase().includes("beach");
-      const isMarkets = document.title.toLowerCase().includes("markets");
-      if ((isCamping || isBeach || isMarkets) && page.dataset.page) {
-        const pageNum = page.dataset.page;
-        let mp3 = null;
-        if (isCamping) {
-          mp3 = `../../storyaudio/camping/bc${pageNum}.mp3`;
-        } else if (isBeach) {
-          mp3 = `../../storyaudio/beach/bb${pageNum}.mp3`;
-        } else if (isMarkets) {
-          mp3 = `../../storyaudio/market/bm${pageNum}.mp3`;
+      // Play MP3 for each page if available (Camping, Beach, Markets, Keepy Uppy, Magic Xylophone, Shadowlands)
+      const title = document.title.toLowerCase();
+      const pageNum = page.dataset.page;
+      let mp3 = null;
+      if (title.includes("camping")) {
+        mp3 = `../../storyaudio/camping/bc${pageNum}.mp3`;
+      } else if (title.includes("beach")) {
+        mp3 = `../../storyaudio/beach/bb${pageNum}.mp3`;
+      } else if (title.includes("markets")) {
+        mp3 = `../../storyaudio/market/bm${pageNum}.mp3`;
+      } else if (title.includes("keepy uppy")) {
+        mp3 = `../../storyaudio/keepyuppy/ku${pageNum}.mp3`;
+      } else if (title.includes("magic xylophone")) {
+        mp3 = `../../storyaudio/xylophone/bx${pageNum}.mp3`;
+      } else if (title.includes("shadowlands")) {
+        mp3 = `../../storyaudio/shadowlands/bs${pageNum}.mp3`;
+      } else if (title.includes("patience")) {
+        mp3 = `../../storyaudio/patience/bp${pageNum}.mp3`;
+      } else if (title.includes("sharing")) {
+        mp3 = `../../storyaudio/sharing/bs${pageNum}.mp3`;
+      } else if (title.includes("teamwork")) {
+        mp3 = `../../storyaudio/teamwork/bt${pageNum}.mp3`;
+      }
+      if (mp3 && page.dataset.page) {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
         }
-        if (mp3) {
-          if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-          }
-          audio = new Audio(mp3);
-          audio.play();
-          readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
-          readBtn.classList.add("stop-btn");
-          audio.onended = function () {
-            readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
-            readBtn.classList.remove("stop-btn");
-          };
-          return;
-        }
+        audio = new Audio(mp3);
+        audio.play();
+        readBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
+        readBtn.classList.add("stop-btn");
+        audio.onended = function () {
+          readBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+          readBtn.classList.remove("stop-btn");
+        };
+        return;
       }
 
       // Default: Use Amazon Polly for TTS

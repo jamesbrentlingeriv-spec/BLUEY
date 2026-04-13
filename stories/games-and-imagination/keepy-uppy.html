@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keepy Uppy - Reading Buddies</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../story.css">
 </head>
@@ -31,46 +33,62 @@
             <span class="char-names"><i class="fas fa-users"></i> Bluey, Bingo, Bandit</span>
         </div>
 
+
         <div class="story-page active" data-page="1">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku1.png" alt="Keepy Uppy Page 1">
+            <audio id="page-audio-1" src="../../storyaudio/keepyuppy/ku1.mp3"></audio>
             <p class="story-text">"Bluey and Bingo had a balloon. The game was simple: do NOT let it touch the ground!
                 'This is Keepy Uppy!'"</p>
         </div>
         <div class="story-page" data-page="2">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku2.png" alt="Keepy Uppy Page 2">
+            <audio id="page-audio-2" src="../../storyaudio/keepyuppy/ku2.mp3"></audio>
             <p class="story-text">"Bluey tapped it high. Bingo batted it with her little paws. Up, up, up it went! Then
                 it floated toward the kitchen."</p>
         </div>
         <div class="story-page" data-page="3">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku3.png" alt="Keepy Uppy Page 3">
+            <audio id="page-audio-3" src="../../storyaudio/keepyuppy/ku3.mp3"></audio>
             <p class="story-text">"Bandit was making a sandwich. Without even looking, he bopped it with his elbow.
                 'Still got it,' he said coolly."</p>
         </div>
         <div class="story-page" data-page="4">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku4.png" alt="Keepy Uppy Page 4">
+            <audio id="page-audio-4" src="../../storyaudio/keepyuppy/ku4.mp3"></audio>
             <p class="story-text">"Chilli kicked it up with her knee while carrying laundry. 'Keepy Uppy lives!' she
                 laughed."</p>
         </div>
         <div class="story-page" data-page="5">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku5.png" alt="Keepy Uppy Page 5">
+            <audio id="page-audio-5" src="../../storyaudio/keepyuppy/ku5.mp3"></audio>
             <p class="story-text">"The balloon bounced off Bingo's nose, then Bluey's tail, then Dad's head! It floated
                 toward the open window."</p>
         </div>
         <div class="story-page" data-page="6">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku6.png" alt="Keepy Uppy Page 6">
+            <audio id="page-audio-6" src="../../storyaudio/keepyuppy/ku6.mp3"></audio>
             <p class="story-text">"Everyone gasped. Bluey made a spectacular leap and tapped it back just in time.
                 'SAFE!' she shouted."</p>
         </div>
         <div class="story-page" data-page="7">
+            <img class="story-img" src="../../STORYPICS/keepyuppy/ku7.png" alt="Keepy Uppy Page 7">
+            <audio id="page-audio-7" src="../../storyaudio/keepyuppy/ku7.mp3"></audio>
             <p class="story-text">"They collapsed laughing until their tummies hurt. 'Again! Again!' Bingo cheered. The
                 best games are played together."</p>
         </div>
 
-        <div class="read-aloud-bar">
-            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
-        </div>
 
+
+        <div class="read-aloud-bar">
+            <button class="read-aloud-btn" onclick="playCurrentPageAudio()"><i class="fas fa-volume-up"></i> Read
+                Aloud</button>
+        </div>
         <div class="page-nav">
             <button class="nav-btn btn-back" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Back</button>
             <div class="dots"></div>
             <button class="nav-btn btn-next" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
         </div>
     </div>
-
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1350.0.min.js"></script>
     <script src="../../story.js"></script>
 </body>

@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patience - Reading Buddies</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../story.css">
 </head>
@@ -32,36 +34,51 @@
         </div>
 
         <div class="story-page active" data-page="1">
+            <img class="story-img" src="../../STORYPICS/patience/bp1.png" alt="Patience Page 1">
+            <audio id="page-audio-1" src="../../storyaudio/patience/bp1.mp3"></audio>
             <p class="story-text">"Bluey planted a seed in a little pot. She watered it carefully and placed it by the
                 window in the sun."</p>
         </div>
         <div class="story-page" data-page="2">
+            <img class="story-img" src="../../STORYPICS/patience/bp2.png" alt="Patience Page 2">
+            <audio id="page-audio-2" src="../../storyaudio/patience/bp2.mp3"></audio>
             <p class="story-text">"The next morning—nothing! 'Where is my flower?' she asked. 'Good things need
                 patience,' Chilli explained."</p>
         </div>
         <div class="story-page" data-page="3">
+            <img class="story-img" src="../../STORYPICS/patience/bp3.png" alt="Patience Page 3">
+            <audio id="page-audio-3" src="../../storyaudio/patience/bp3.mp3"></audio>
             <p class="story-text">"Bluey checked every hour. She even tried talking to the pot. Bingo sang it a growing
                 song!"</p>
         </div>
         <div class="story-page" data-page="4">
+            <img class="story-img" src="../../STORYPICS/patience/bp4.png" alt="Patience Page 4">
+            <audio id="page-audio-4" src="../../storyaudio/patience/bp4.mp3"></audio>
             <p class="story-text">"Days passed. Bluey got busy playing games and going on adventures. She almost forgot
                 about her little seed."</p>
         </div>
         <div class="story-page" data-page="5">
+            <img class="story-img" src="../../STORYPICS/patience/bp5.png" alt="Patience Page 5">
+            <audio id="page-audio-5" src="../../storyaudio/patience/bp5.mp3"></audio>
             <p class="story-text">"Then one morning, Bingo shouted, 'Bluey! Come look!' A tiny green sprout poked
                 through the soil."</p>
         </div>
         <div class="story-page" data-page="6">
+            <img class="story-img" src="../../STORYPICS/patience/bp6.png" alt="Patience Page 6">
+            <audio id="page-audio-6" src="../../storyaudio/patience/bp6.mp3"></audio>
             <p class="story-text">"Weeks later, a beautiful yellow sunflower opened up, as big as Bluey's face! 'I grew
                 that!' Bluey beamed."</p>
         </div>
         <div class="story-page" data-page="7">
+            <img class="story-img" src="../../STORYPICS/patience/bp7.png" alt="Patience Page 7">
+            <audio id="page-audio-7" src="../../storyaudio/patience/bp7.mp3"></audio>
             <p class="story-text">"'The best things in life are worth waiting for,' Bandit smiled. Bluey decided
                 patience was not so bad after all."</p>
         </div>
 
         <div class="read-aloud-bar">
-            <button class="read-aloud-btn"><i class="fas fa-volume-up"></i> Read Aloud</button>
+            <button class="read-aloud-btn" onclick="playCurrentPageAudio()"><i class="fas fa-volume-up"></i> Read
+                Aloud</button>
         </div>
 
         <div class="page-nav">

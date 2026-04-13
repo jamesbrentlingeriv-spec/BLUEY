@@ -1,12 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap");
+/* Consistent story card thumbnail style for all stories */
+.card-img img.keepy-uppy-thumb,
+.card-img img.magic-xylophone-thumb,
+.card-img img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: #d6eaff;
+  border-radius: 0;
+  display: block;
+}
+/* Keepy Uppy and Magic Xylophone thumbnails in story card */
+.card-img img.keepy-uppy-thumb,
+.card-img img.magic-xylophone-thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: #d6eaff;
+  border-radius: 0;
+}
+/* Magic Xylophone thumbnail in story card */
+.card-img img.magic-xylophone-thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: #d6eaff;
+  border-radius: 0;
+}
+/* Keepy Uppy thumbnail in story card */
+.card-img img.keepy-uppy-thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: #d6eaff;
+  border-radius: 0;
+}
 /* Ensure highlight always visible */
-.word.highlight, .story-text .word.highlight {
+.word.highlight,
+.story-text .word.highlight {
   background: #e76f51 !important;
   color: #fff !important;
   border-radius: 4px;
   outline: 2px solid #222 !important;
   z-index: 2;
   position: relative;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 /* ── Bluey's Word Witness – Story Page Styles ── */
 * {
@@ -139,8 +179,14 @@ body {
 .story-img {
   max-width: 600px;
   width: 100%;
-  border-radius: 18px;
-  box-shadow: 0 4px 32px rgba(91,164,207,0.18);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 32px rgba(91, 164, 207, 0.18);
+}
+
+.story-audio {
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 /* Make BLUECAMP3.png much larger on page 3 */
@@ -148,18 +194,21 @@ body {
   max-width: 700px;
   width: 100%;
   border-radius: 24px;
-  box-shadow: 0 4px 32px rgba(91,164,207,0.18);
-}
+  box-shadow: 0 4px 32px rgba(91, 164, 207, 0.18);
 }
 .story-text {
-  font-size: 3.125em;
-  font-style: normal;
-  color: #fff;
-  line-height: 1.1;
-  max-width: 1100px;
-  font-family: 'Nunito', 'Baloo 2', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+  font-family:
+    "Baloo 2", "Nunito", "Comic Sans MS", "Comic Sans", cursive, sans-serif;
+  font-size: 2em;
   font-weight: 1000;
-  letter-spacing: 2.5px;
+  color: #1e3a5f;
+  text-shadow:
+    0 2px 0 #fff,
+    2px 4px 8px #5ba4cf;
+  -webkit-text-stroke: 1px #1e3a5f;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
   margin-bottom: 18px;
   display: inline-block;
   text-align: center;
@@ -168,7 +217,6 @@ body {
   border-radius: 0;
   padding: 0;
   box-shadow: none;
-  text-shadow: none;
 }
 
 /* Clickable words */
@@ -191,7 +239,7 @@ body {
   margin: 0;
 }
 .story-text .word:hover {
-  background: rgba(255,255,255,0.18);
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
 }
 .story-text .word.highlight {
@@ -303,7 +351,7 @@ body {
     font-size: 1.5em;
   }
   .story-text {
-    font-size: 1.1em;
+    font-size: 1em;
   }
   .nav-btn {
     padding: 12px 22px;
