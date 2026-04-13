@@ -12,6 +12,34 @@
             font-family: 'Nunito', sans-serif;
         }
 
+        /* Fullscreen intro video overlay */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+        }
+
+        #intro-overlay.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #intro-video {
+            max-width: 98vw;
+            max-height: 98vh;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 24px #b3d6f7;
+        }
+
         .tracing-container {
             max-width: 420px;
             margin: 0 auto;
@@ -58,6 +86,9 @@
 </head>
 
 <body>
+    <div id="intro-overlay">
+        <video id="intro-video" src="blueywrite.mp4" autoplay playsinline></video>
+    </div>
     <div class="tracing-container">
         <div class="letter-label">Trace the letter: <span id="letter-label">A</span></div>
         <canvas id="tracing-canvas" class="letter-canvas" width="320" height="400"></canvas>
@@ -65,6 +96,29 @@
         <video id="success-video" class="success-video" width="220" height="140" src="woo.mp4" preload="auto"></video>
     </div>
     <script>
+        // Intro video overlay logic
+        const introOverlay = document.getElementById('intro-overlay');
+        const introVideo = document.getElementById('intro-video');
+        // Hide overlay after video ends or on click/tap
+        function hideIntroOverlay() {
+            introOverlay.classList.add('hide');
+            setTimeout(() => { introOverlay.style.display = 'none'; }, 600);
+        }
+        introVideo.addEventListener('ended', hideIntroOverlay);
+        introOverlay.addEventListener('click', hideIntroOverlay);
+        // Prevent scrolling while overlay is up
+        document.body.style.overflow = 'hidden';
+        introVideo.addEventListener('play', () => {
+            document.body.style.overflow = 'hidden';
+        });
+        introVideo.addEventListener('ended', () => {
+            document.body.style.overflow = '';
+        });
+        introOverlay.addEventListener('transitionend', () => {
+            if (introOverlay.classList.contains('hide')) {
+                document.body.style.overflow = '';
+            }
+        });
         // Alphabet
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         let currentIndex = 0;
@@ -188,6 +242,16 @@
 
         // Init
         drawDottedLetter(letters[currentIndex]);
+        // Pause tracing game until intro video is done
+        if (introOverlay) {
+            // Block pointer events on tracing-container until overlay is gone
+            document.querySelector('.tracing-container').style.pointerEvents = 'none';
+            introOverlay.addEventListener('transitionend', () => {
+                if (introOverlay.classList.contains('hide')) {
+                    document.querySelector('.tracing-container').style.pointerEvents = '';
+                }
+            });
+        }
     </script>
 </body>
 
