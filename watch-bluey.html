@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Bluey - Season 3 (50 Episodes)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 169px;
+            object-fit: cover;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .video-episode {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal iframe {
+            width: 90%;
+            height: 90%;
+            max-width: 1200px;
+            max-height: 675px;
+            border: none;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .volume-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1002;
+        }
+
+        .volume-slider {
+            width: 120px;
+            height: 5px;
+            accent-color: #4CAF50;
+        }
+
+        .max-volume-btn {
+            background: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🐾 Watch Bluey 🐾</h1>
+        <p>Season 3 - All 50 Episodes with Official Thumbnails | Instant Play | 200% Volume</p>
+    </div>
+
+    <div class="video-grid" id="videoGrid"></div>
+
+    <div id="modal" class="modal">
+        <button class="close-modal" onclick="closeModal()">×</button>
+        <iframe id="videoPlayer" allowfullscreen allow="autoplay; fullscreen"></iframe>
+        <div class="volume-controls">
+            <label>🔊 200%</label>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="2" step="0.1" value="2"
+                onchange="setVolume(this.value)">
+            <button class="max-volume-btn" onclick="maxVolume()">MAX</button>
+        </div>
+    </div>
+
+    <script>
+        const episodes = [
+            { title: 'Dirt', episode: 'S03E36', fileId: '1NMQJSOm17mUwcTLqXbhC0-eYwYNZhfCE', thumbnail: 'https://drive.google.com/thumbnail?id=1NMQJSOm17mUwcTLqXbhC0-eYwYNZhfCE&sz=w600' },
+            { title: 'Cubby', episode: 'S03E38', fileId: '1btbYFx8waKwqk7_VSG3SUTZorC_8kUSn', thumbnail: 'https://drive.google.com/thumbnail?id=1btbYFx8waKwqk7_VSG3SUTZorC_8kUSn&sz=w600' },
+            { title: 'Slide', episode: 'S03E46', fileId: '173I6ZM7KC23mfGMtFNPx2xoDd20ChGRa', thumbnail: 'https://drive.google.com/thumbnail?id=173I6ZM7KC23mfGMtFNPx2xoDd20ChGRa&sz=w600' },
+            { title: 'Unicorse', episode: 'S03E07', fileId: '1RhQqO8WAi-CZje9xRDdoizqVLwUk7PrQ', thumbnail: 'https://drive.google.com/thumbnail?id=1RhQqO8WAi-CZje9xRDdoizqVLwUk7PrQ&sz=w600' },
+            { title: 'Omelette', episode: 'S03E04', fileId: '1RnGvfzGmJhq1SaXyGV90IF1nGZ8WEmwP', thumbnail: 'https://drive.google.com/thumbnail?id=1RnGvfzGmJhq1SaXyGV90IF1nGZ8WEmwP&sz=w600' },
+            { title: 'Rain', episode: 'S03E18', fileId: '1DZ-D2oE--hVapQxn65g35e02z4XU2l7x', thumbnail: 'https://drive.google.com/thumbnail?id=1DZ-D2oE--hVapQxn65g35e02z4XU2l7x&sz=w600' },
+            { title: 'Promises', episode: 'S03E03', fileId: '1hEQrwNoL8o04cKRs6rBb7qXFNOhZfiB2', thumbnail: 'https://drive.google.com/thumbnail?id=1hEQrwNoL8o04cKRs6rBb7qXFNOhZfiB2&sz=w600' },
+            { title: 'Relax', episode: 'S03E40', fileId: '1k37w9rh-fMmf8eYFJrWmIZV0SEQPSKQF', thumbnail: 'https://drive.google.com/thumbnail?id=1k37w9rh-fMmf8eYFJrWmIZV0SEQPSKQF&sz=w600' },
+            { title: 'Magic', episode: 'S03E09', fileId: '1pf6OzwCPpfFjCx34H2R8PzTJQ1JxtRqx', thumbnail: 'https://drive.google.com/thumbnail?id=1pf6OzwCPpfFjCx34H2R8PzTJQ1JxtRqx&sz=w600' },
+            { title: 'Tradies', episode: 'S03E33', fileId: '185Gr9pze3-Fd4weMPkQ6M2ElJnZaEvMi', thumbnail: 'https://drive.google.com/thumbnail?id=185Gr9pze3-Fd4weMPkQ6M2ElJnZaEvMi&sz=w600' },
+            { title: 'Mini Bluey', episode: 'S03E06', fileId: '1QqWmjlFg3gzFnWiTS8fiH3w7QHHf5eQ7', thumbnail: 'https://drive.google.com/thumbnail?id=1QqWmjlFg3gzFnWiTS8fiH3w7QHHf5eQ7&sz=w600' },
+            { title: 'Granny Mobile', episode: 'S03E34', fileId: '1_kOoauVWS5HdgJqZWZuLUkGx9hhoZMwp', thumbnail: 'https://drive.google.com/thumbnail?id=1_kOoauVWS5HdgJqZWZuLUkGx9hhoZMwp&sz=w600' },
+            { title: 'Exercise', episode: 'S03E39', fileId: '1VXAc1sAz-aBnfj26YhmqjVwmIS8hZfq7', thumbnail: 'https://drive.google.com/thumbnail?id=1VXAc1sAz-aBnfj26YhmqjVwmIS8hZfq7&sz=w600' },
+            { title: 'Show and Tell', episode: 'S03E42', fileId: '1d1D43_L5rydXUlczu2cLb8SnQ0Yk1cQP', thumbnail: 'https://drive.google.com/thumbnail?id=1d1D43_L5rydXUlczu2cLb8SnQ0Yk1cQP&sz=w600' },
+            { title: 'Family Meeting', episode: 'S03E27', fileId: '1pCg3ghEUWukyBGjxgreR593f4vcnrij3', thumbnail: 'https://drive.google.com/thumbnail?id=1pCg3ghEUWukyBGjxgreR593f4vcnrij3&sz=w600' },
+            { title: 'Cricket', episode: 'S03E47', fileId: '1v97dN9WM7clW5SotDwF0ZYsmxoPm8yX0', thumbnail: 'https://drive.google.com/thumbnail?id=1v97dN9WM7clW5SotDwF0ZYsmxoPm8yX0&sz=w600' },
+            { title: 'Driving', episode: 'S03E20', fileId: '11T_qCdaOU4O6T6q2KFAqzgpC1_wSONsD', thumbnail: 'https://drive.google.com/thumbnail?id=11T_qCdaOU4O6T6q2KFAqzgpC1_wSONsD&sz=w600' },
+            { title: 'Onesies', episode: 'S03E32', fileId: '1IyMigZMHkwBPHIzjhqrzRzLY7yCgE4dk', thumbnail: 'https://drive.google.com/thumbnail?id=1IyMigZMHkwBPHIzjhqrzRzLY7yCgE4dk&sz=w600' },
+            { title: 'TV Shop', episode: 'S03E45', fileId: '1bEQ6P2GXsjQDFcRwZym8iWBehRa99U4K', thumbnail: 'https://drive.google.com/thumbnail?id=1bEQ6P2GXsjQDFcRwZym8iWBehRa99U4K&sz=w600' },
+            { title: 'The Sign', episode: 'S03E49', fileId: '1LJos9I6YDq2wcm7CQJQCH5MQ3VgiSLcY', thumbnail: 'https://drive.google.com/thumbnail?id=1LJos9I6YDq2wcm7CQJQCH5MQ3VgiSLcY&sz=w600' },
+            { title: 'Phones', episode: 'S03E16', fileId: '122-V3YDtvPJkq6fuv-2JqStbwWf0o1hL', thumbnail: 'https://drive.google.com/thumbnail?id=122-V3YDtvPJkq6fuv-2JqStbwWf0o1hL&sz=w600' },
+            { title: 'Born Yesterday', episode: 'S03E05', fileId: '13xCiNkNrbCSeMS5hUYnpMtDImTaEuHCX', thumbnail: 'https://drive.google.com/thumbnail?id=13xCiNkNrbCSeMS5hUYnpMtDImTaEuHCX&sz=w600' },
+            { title: 'Dragon', episode: 'S03E43', fileId: '1Iaefbn0Fl0d3hHPl6nEEEnxZaZkMBj7y', thumbnail: 'https://drive.google.com/thumbnail?id=1Iaefbn0Fl0d3hHPl6nEEEnxZaZkMBj7y&sz=w600' },
+            { title: 'Housework', episode: 'S03E12', fileId: '18mVA-fV7bl5D5FcjOf-8eyaj1LZ5DV3a', thumbnail: 'https://drive.google.com/thumbnail?id=18mVA-fV7bl5D5FcjOf-8eyaj1LZ5DV3a&sz=w600' },
+            { title: 'Whale Watching', episode: 'S03E22', fileId: '1D5VTyzo4WsJPRR5PCFhAg77rznn_ZvZR', thumbnail: 'https://drive.google.com/thumbnail?id=1D5VTyzo4WsJPRR5PCFhAg77rznn_ZvZR&sz=w600' },
+            { title: 'Pass the Parcel', episode: 'S03E13', fileId: '1cnlnNnDV2IMAakZNNFsyzxb_wywRALst', thumbnail: 'https://drive.google.com/thumbnail?id=1cnlnNnDV2IMAakZNNFsyzxb_wywRALst&sz=w600' },
+            { title: 'Stickbird', episode: 'S03E41', fileId: '1uVGGk0fuJ2DYwCg_LawmMrVQPinQme5T', thumbnail: 'https://drive.google.com/thumbnail?id=1uVGGk0fuJ2DYwCg_LawmMrVQPinQme5T&sz=w600' },
+            { title: 'Tina', episode: 'S03E21', fileId: '1IuVygJWaucfu614bFZ92JbLCUPyjX3Dh', thumbnail: 'https://drive.google.com/thumbnail?id=1IuVygJWaucfu614bFZ92JbLCUPyjX3Dh&sz=w600' },
+            { title: 'Space', episode: 'S03E35', fileId: '1iM0C1up_cph_wnNS9IomVPsDDNbOP9RL', thumbnail: 'https://drive.google.com/thumbnail?id=1iM0C1up_cph_wnNS9IomVPsDDNbOP9RL&sz=w600' },
+            { title: 'Stories', episode: 'S03E29', fileId: '1mtBNqKtukaGlClypZ4zo6ttfw4CK9R6N', thumbnail: 'https://drive.google.com/thumbnail?id=1mtBNqKtukaGlClypZ4zo6ttfw4CK9R6N&sz=w600' },
+            { title: 'Obstacle Course', episode: 'S03E02', fileId: '16648XnCVUkNCuk2Tf-_4DaoAlWXHrKie', thumbnail: 'https://drive.google.com/thumbnail?id=16648XnCVUkNCuk2Tf-_4DaoAlWXHrKie&sz=w600' },
+            { title: 'Ghostbasket', episode: 'S03E48', fileId: '1GFwONZeaO0wtAsJTEUEMxA9HnbDZAwC4', thumbnail: 'https://drive.google.com/thumbnail?id=1GFwONZeaO0wtAsJTEUEMxA9HnbDZAwC4&sz=w600' },
+            { title: 'The Decider', episode: 'S03E37', fileId: '1VP86KKM3d0jMK6Xq2H_EZutT4Mb3lDe4', thumbnail: 'https://drive.google.com/thumbnail?id=1VP86KKM3d0jMK6Xq2H_EZutT4Mb3lDe4&sz=w600' },
+            { title: 'Smoochy Kiss', episode: 'S03E26', fileId: '1bNB36hUd66y6NKaDKAenAquOMZnfzO3Z', thumbnail: 'https://drive.google.com/thumbnail?id=1bNB36hUd66y6NKaDKAenAquOMZnfzO3Z&sz=w600' },
+            { title: 'Explorers', episode: 'S03E15', fileId: '18O4DYzTvq0N-rusM1-nOdO8oHEoqxXoU', thumbnail: 'https://drive.google.com/thumbnail?id=18O4DYzTvq0N-rusM1-nOdO8oHEoqxXoU&sz=w600' },
+            { title: 'Wild Girls', episode: 'S03E44', fileId: '1L-t5o_wCW3M_EubT-RbvOu6e67R8mEiH', thumbnail: 'https://drive.google.com/thumbnail?id=1L-t5o_wCW3M_EubT-RbvOu6e67R8mEiH&sz=w600' },
+            { title: 'Perfect', episode: 'S03E14', fileId: '1zs3_zVTsVqY3mmucepjwZ6h-sdjO1MXg', thumbnail: 'https://drive.google.com/thumbnail?id=1zs3_zVTsVqY3mmucepjwZ6h-sdjO1MXg&sz=w600' },
+            { title: 'Faceytalk', episode: 'S03E23', fileId: '1H-mnExg0BWZfu_rF8yfDmiBOQLN9FC_Z', thumbnail: 'https://drive.google.com/thumbnail?id=1H-mnExg0BWZfu_rF8yfDmiBOQLN9FC_Z&sz=w600' },
+            { title: 'Bedroom', episode: 'S03E01', fileId: '1MTF0XPiHh9puJ4nW8nK5miX2RGDBx14U', thumbnail: 'https://drive.google.com/thumbnail?id=1MTF0XPiHh9puJ4nW8nK5miX2RGDBx14U&sz=w600' },
+            { title: 'Pavlova', episode: 'S03E17', fileId: '1kA_xgNIbLGV5g6J6Fg3_q73HMjKfvrqD', thumbnail: 'https://drive.google.com/thumbnail?id=1kA_xgNIbLGV5g6J6Fg3_q73HMjKfvrqD&sz=w600' },
+            { title: 'Sheepdog', episode: 'S03E11', fileId: '1sS0sdvBh1H4Xp4qTY-oqXosWt67enu_J', thumbnail: 'https://drive.google.com/thumbnail?id=1sS0sdvBh1H4Xp4qTY-oqXosWt67enu_J&sz=w600' },
+            { title: 'Puppets', episode: 'S03E30', fileId: '13aDvvj7VaPVRsfJJBmQ2lgk5hXxid3hN', thumbnail: 'https://drive.google.com/thumbnail?id=13aDvvj7VaPVRsfJJBmQ2lgk5hXxid3hN&sz=w600' },
+            { title: 'Musical Statues', episode: 'S03E28', fileId: '1PuzLhIN2kU6EaVP1K4T5vcTEmRb70YPs', thumbnail: 'https://drive.google.com/thumbnail?id=1PuzLhIN2kU6EaVP1K4T5vcTEmRb70YPs&sz=w600' },
+            { title: 'Fairytale', episode: 'S03E25', fileId: '1RFdKA8UyuPwjSNAQDcni48H_HKEL1Bzy', thumbnail: 'https://drive.google.com/thumbnail?id=1RFdKA8UyuPwjSNAQDcni48H_HKEL1Bzy&sz=w600' },
+            { title: 'Turtleboy', episode: 'S03E31', fileId: '1bWyiwoPMcTiqTTFAhF8xreQhLIyeFdJW', thumbnail: 'https://drive.google.com/thumbnail?id=1bWyiwoPMcTiqTTFAhF8xreQhLIyeFdJW&sz=w600' },
+            { title: 'Pizza Girls', episode: 'S03E19', fileId: '10iaMsPXEAvwUepmHaDgXI3RA58Sgp-MZ', thumbnail: 'https://drive.google.com/thumbnail?id=10iaMsPXEAvwUepmHaDgXI3RA58Sgp-MZ&sz=w600' },
+            { title: 'Chest', episode: 'S03E10', fileId: '1latxCbTCKHZmXUPVQ-IX-XHIsXgNqP9f', thumbnail: 'https://drive.google.com/thumbnail?id=1latxCbTCKHZmXUPVQ-IX-XHIsXgNqP9f&sz=w600' },
+            { title: 'Ragdoll', episode: 'S03E24', fileId: '1xU3naJU6ZeqkjxRfOH023gF607vjDky7', thumbnail: 'https://drive.google.com/thumbnail?id=1xU3naJU6ZeqkjxRfOH023gF607vjDky7&sz=w600' },
+            { title: 'Curry Quest', episode: 'S03E08', fileId: '1-oikkNB6ou8kLWIECUjLVzsoacLnqa37', thumbnail: 'https://drive.google.com/thumbnail?id=1-oikkNB6ou8kLWIECUjLVzsoacLnqa37&sz=w600' },
+            { title: 'Surprise', episode: 'S03E50', fileId: '14ICtsW6r0YGnhritE-HjDCxaPgqzgSTQ', thumbnail: 'https://drive.google.com/thumbnail?id=14ICtsW6r0YGnhritE-HjDCxaPgqzgSTQ&sz=w600' }
+        ];
+
+        const grid = document.getElementById('videoGrid');
+        episodes.forEach(episode => {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.onclick = () => openModal(`https://drive.google.com/file/d/${episode.fileId}/preview`);
+            card.innerHTML = `
+                <div class="video-overlay">
+                    <img src="${episode.thumbnail}" class="video-thumbnail" loading="lazy" alt="${episode.title}">
+                    <div class="play-overlay">
+                        <button class="play-button">▶ ${episode.title}</button>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">${episode.title}</div>
+                    <div class="video-episode">${episode.episode}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        function openModal(url) {
+            document.getElementById('videoPlayer').src = url + '?autoplay=1&mute=0&rm=minimal';
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('volumeSlider').value = 2;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('videoPlayer').src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('modal').onclick = e => e.target === document.getElementById('modal') && closeModal();
+        document.onkeydown = e => e.key === 'Escape' && closeModal();
+
+        function setVolume(v) {
+            const iframe = document.getElementById('videoPlayer');
+            iframe.contentWindow.postMessage({ type: 'setVolume', volume: v }, '*');
+        }
+
+        function maxVolume() {
+            setVolume(2);
+        }
+    </script>
+</body>
+
+</html>

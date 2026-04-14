@@ -671,6 +671,125 @@
         </script>
     </footer>
 
+    <!-- Dance Party Section -->
+    <section style="max-width:900px;margin:48px auto 0 auto;padding:0 16px 0 16px;">
+        <h2 class="section-title" style="margin-top:40px;">💃 Bluey and Marleigh Dance Party</h2>
+        <div style="text-align:center;font-size:1.1em;color:#7A8FA6;font-weight:700;margin-bottom:18px;">Turn it up and dance!</div>
+        <div class="story-grid" style="max-width:700px;margin:0 auto;">
+            <div class="story-card" style="cursor:pointer;" onclick="openDanceParty()">
+                <div class="card-img"><img src="blueymusic/dancing.png" alt="Dance Party" style="width:100%;height:200px;object-fit:cover;background:#D6EAFF;border-radius:0;"></div>
+                <div class="card-body">
+                    <h3 class="story-title">Pick a Song!</h3>
+                    <p>Choose a Bluey song and dance along with the video!</p>
+                </div>
+            </div>
+            <a href="watch-bluey.html" class="story-card">
+                <div class="card-img"><img src="STORYPICS/beach/bluebeach1.png" alt="Watch Bluey" style="width:100%;height:200px;object-fit:cover;background:#D6EAFF;border-radius:0;"></div>
+                <div class="card-body">
+                    <h3 class="story-title">Watch Bluey</h3>
+                    <p>Watch all 50 episodes from Season 3!</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">Season 3</span>
+                    <span class="tag">50 Episodes</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Dance Party: Tracklist Modal -->
+    <div id="danceTracklistModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,58,95,0.85);z-index:10001;align-items:center;justify-content:center;">
+        <div style="position:relative;background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(30,58,95,0.18);padding:28px 24px 24px;max-width:480px;width:92vw;max-height:80vh;overflow-y:auto;">
+            <button onclick="closeDanceTracklist()" style="position:absolute;top:10px;right:14px;background:none;border:none;font-size:2em;color:#5ba4cf;cursor:pointer;">&times;</button>
+            <h3 style="font-family:'Nunito',sans-serif;font-weight:800;color:#1e3a5f;margin-bottom:18px;font-size:1.4em;">🎵 Bluey Music</h3>
+            <ul id="danceTracklist" style="list-style:none;padding:0;margin:0;"></ul>
+        </div>
+    </div>
+
+    <!-- Dance Party: Player Modal -->
+    <div id="dancePlayerModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,58,95,0.92);z-index:10002;align-items:center;justify-content:center;">
+        <div style="position:relative;background:#fff;border-radius:18px;box-shadow:0 8px 32px rgba(30,58,95,0.18);padding:16px;max-width:600px;width:95vw;display:flex;flex-direction:column;align-items:center;">
+            <button onclick="closeDancePlayer()" style="position:absolute;top:10px;right:14px;background:none;border:none;font-size:2em;color:#5ba4cf;cursor:pointer;z-index:2;">&times;</button>
+            <div id="danceNowPlaying" style="font-family:'Nunito',sans-serif;font-weight:800;color:#1e3a5f;font-size:1.1em;margin-bottom:10px;text-align:center;"></div>
+            <video id="danceVideo" src="blueymusic/dancing.mp4" loop muted playsinline style="width:100%;max-width:560px;border-radius:12px;background:#000;"></video>
+            <audio id="danceAudio"></audio>
+        </div>
+    </div>
+
+    <script>
+        var danceTracks = [
+            { title: 'Bluey Theme Tune (Instrument Parade)', file: 'blueymusic/01 Bluey Theme Tune (Instrument Parade).mp3' },
+            { title: 'Keepy Uppy', file: 'blueymusic/02 Keepy Uppy.mp3' },
+            { title: 'Here Come The Grannies!', file: 'blueymusic/03 Here Come The Grannies!.mp3' },
+            { title: 'A Message From The Fairies (John Ryan\'s Polka)', file: 'blueymusic/04 A Message From The Fairies (John Ryan\'s Polka).mp3' },
+            { title: 'Taxi', file: 'blueymusic/05 Taxi.mp3' },
+            { title: 'The Claw (Pachelbel\'s Canon)', file: 'blueymusic/06 The Claw (Pachelbel\'s Canon).mp3' },
+            { title: 'Pool', file: 'blueymusic/07 Pool.mp3' },
+            { title: 'Who Likes To Dance?', file: 'blueymusic/08 Who Likes To Dance-.mp3' },
+            { title: 'Bluey Theme Tune (Extended)', file: 'blueymusic/09 Bluey Theme Tune (Extended).mp3' },
+            { title: 'The Weekend', file: 'blueymusic/10 The Weekend.mp3' },
+            { title: 'Wagon Ride', file: 'blueymusic/11 Wagon Ride.mp3' },
+            { title: 'Camping', file: 'blueymusic/12 Camping.mp3' },
+            { title: 'Fruit Bat', file: 'blueymusic/13 Fruit Bat.mp3' },
+            { title: 'The Creek (Intro)', file: 'blueymusic/14 The Creek (Intro).mp3' },
+            { title: 'Creek Is Beautiful!', file: 'blueymusic/15 Creek Is Beautiful!.mp3' },
+            { title: 'I Know A Place (The Creek Song)', file: 'blueymusic/16 I Know A Place (The Creek Song).mp3' },
+            { title: 'Bluey Theme Tune', file: 'blueymusic/17 Bluey Theme Tune.mp3' }
+        ];
+
+        function openDanceParty() {
+            var list = document.getElementById('danceTracklist');
+            list.innerHTML = '';
+            danceTracks.forEach(function(track, i) {
+                var li = document.createElement('li');
+                li.innerHTML = '<span style="color:#5ba4cf;font-weight:800;margin-right:10px;">' + (i+1) + '.</span>' + track.title;
+                li.style.cssText = 'padding:12px 10px;border-bottom:1px solid #eef2f7;cursor:pointer;font-family:Nunito,sans-serif;font-weight:700;font-size:1em;color:#1e3a5f;border-radius:8px;transition:background 0.15s;';
+                li.onmouseover = function(){ this.style.background='#eef6ff'; };
+                li.onmouseout = function(){ this.style.background=''; };
+                li.onclick = function(){ playDanceTrack(track); };
+                list.appendChild(li);
+            });
+            document.getElementById('danceTracklistModal').style.display = 'flex';
+        }
+
+        function closeDanceTracklist() {
+            document.getElementById('danceTracklistModal').style.display = 'none';
+        }
+
+        function playDanceTrack(track) {
+            closeDanceTracklist();
+            var audio = document.getElementById('danceAudio');
+            var video = document.getElementById('danceVideo');
+            document.getElementById('danceNowPlaying').textContent = '🎵 ' + track.title;
+            audio.src = track.file;
+            audio.load();
+            video.currentTime = 0;
+            video.play();
+            audio.play();
+            audio.onended = function() { closeDancePlayer(); };
+            document.getElementById('dancePlayerModal').style.display = 'flex';
+        }
+
+        function closeDancePlayer() {
+            var audio = document.getElementById('danceAudio');
+            var video = document.getElementById('danceVideo');
+            audio.pause();
+            audio.currentTime = 0;
+            audio.src = '';
+            audio.onended = null;
+            video.pause();
+            video.currentTime = 0;
+            document.getElementById('dancePlayerModal').style.display = 'none';
+        }
+
+        document.addEventListener('click', function(e) {
+            var tModal = document.getElementById('danceTracklistModal');
+            var pModal = document.getElementById('dancePlayerModal');
+            if (tModal && tModal.style.display === 'flex' && e.target === tModal) closeDanceTracklist();
+            if (pModal && pModal.style.display === 'flex' && e.target === pModal) closeDancePlayer();
+        });
+    </script>
+
     <!-- Bluey and Me: Short Videos Section -->
     <section class="bluey-and-me-section" style="max-width:900px;margin:48px auto 0 auto;padding:0 16px 48px 16px;">
         <h2 class="section-title" style="margin-top:40px;">🎬 Bluey and Me</h2>
