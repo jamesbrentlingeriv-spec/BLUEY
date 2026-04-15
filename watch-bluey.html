@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Bluey - Season 3 (50 Episodes)</title>
+    <title>Watch Bluey - Season 3 (11 Episodes)</title>
     <style>
         * {
             margin: 0;
@@ -49,18 +49,28 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-overlay {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            overflow: hidden;
         }
 
         .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 169px;
+            height: 100%;
             object-fit: cover;
         }
 
@@ -70,7 +80,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -83,33 +93,38 @@
         }
 
         .play-button {
+            width: 80px;
+            height: 80px;
             background: rgba(255, 255, 255, 0.9);
-            border: none;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #667eea;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.3s;
         }
 
         .play-button:hover {
-            background: white;
             transform: scale(1.1);
         }
 
         .video-info {
-            padding: 15px;
+            padding: 20px;
         }
 
         .video-title {
+            font-size: 1.3em;
             font-weight: bold;
-            margin-bottom: 5px;
+            color: #333;
+            margin-bottom: 8px;
         }
 
         .video-episode {
-            color: #666;
             font-size: 0.9em;
+            color: #666;
         }
 
         .modal {
@@ -120,7 +135,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
+            z-index: 10000;
             align-items: center;
             justify-content: center;
         }
@@ -129,67 +144,62 @@
             display: flex;
         }
 
-        .modal iframe {
+        .modal-content {
+            position: relative;
             width: 90%;
-            height: 90%;
             max-width: 1200px;
-            max-height: 675px;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             border: none;
         }
 
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 30px;
+            top: -50px;
+            right: 0;
             background: rgba(255, 255, 255, 0.2);
             color: white;
-            font-size: 30px;
+            font-size: 32px;
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            border: none;
+            border: 2px solid white;
             cursor: pointer;
-            z-index: 1001;
-        }
-
-        .volume-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
+            z-index: 10001;
             display: flex;
             align-items: center;
-            gap: 10px;
-            z-index: 1002;
+            justify-content: center;
+            transition: all 0.3s;
         }
 
-        .volume-slider {
-            width: 120px;
-            height: 5px;
-            accent-color: #4CAF50;
-        }
-
-        .max-volume-btn {
-            background: #4CAF50;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
         }
 
         @media (max-width: 768px) {
-            .video-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 15px;
-            }
-
             .header h1 {
                 font-size: 2em;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
             }
         }
     </style>
@@ -198,86 +208,51 @@
 <body>
     <div class="header">
         <h1>🐾 Watch Bluey 🐾</h1>
-        <p>Season 3 - All 50 Episodes with Official Thumbnails | Instant Play | 200% Volume</p>
+        <p>Season 3 - 11 Episodes | Jumpshare Streaming</p>
     </div>
 
-    <div class="video-grid" id="videoGrid"></div>
+    <div id="videoGrid" class="video-grid"></div>
 
     <div id="modal" class="modal">
         <button class="close-modal" onclick="closeModal()">×</button>
-        <iframe id="videoPlayer" allowfullscreen allow="autoplay; fullscreen"></iframe>
-        <div class="volume-controls">
-            <label>🔊 200%</label>
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="2" step="0.1" value="2"
-                onchange="setVolume(this.value)">
-            <button class="max-volume-btn" onclick="maxVolume()">MAX</button>
+        <div class="modal-content">
+            <iframe 
+                id="videoPlayer" 
+                frameborder="0" 
+                webkitallowfullscreen 
+                mozallowfullscreen 
+                allowfullscreen
+                allow="autoplay; fullscreen">
+            </iframe>
         </div>
     </div>
 
     <script>
         const episodes = [
-            { title: 'Dirt', episode: 'S03E36', fileId: '1NMQJSOm17mUwcTLqXbhC0-eYwYNZhfCE', thumbnail: 'thumbs/episode 36.jpg' },
-            { title: 'Cubby', episode: 'S03E38', fileId: '1btbYFx8waKwqk7_VSG3SUTZorC_8kUSn', thumbnail: 'thumbs/episode 38.jpg' },
-            { title: 'Slide', episode: 'S03E46', fileId: '173I6ZM7KC23mfGMtFNPx2xoDd20ChGRa', thumbnail: 'thumbs/episode 46.jpg' },
-            { title: 'Unicorse', episode: 'S03E07', fileId: '1RhQqO8WAi-CZje9xRDdoizqVLwUk7PrQ', thumbnail: 'thumbs/episode 7.jpg' },
-            { title: 'Omelette', episode: 'S03E04', fileId: '1RnGvfzGmJhq1SaXyGV90IF1nGZ8WEmwP', thumbnail: 'thumbs/episode 4.jpg' },
-            { title: 'Rain', episode: 'S03E18', fileId: '1DZ-D2oE--hVapQxn65g35e02z4XU2l7x', thumbnail: 'thumbs/episode 18.jpg' },
-            { title: 'Promises', episode: 'S03E03', fileId: '1hEQrwNoL8o04cKRs6rBb7qXFNOhZfiB2', thumbnail: 'thumbs/episode 3.jpg' },
-            { title: 'Relax', episode: 'S03E40', fileId: '1k37w9rh-fMmf8eYFJrWmIZV0SEQPSKQF', thumbnail: 'thumbs/episode 40.jpg' },
-            { title: 'Magic', episode: 'S03E09', fileId: '1pf6OzwCPpfFjCx34H2R8PzTJQ1JxtRqx', thumbnail: 'thumbs/episode 9.jpg' },
-            { title: 'Tradies', episode: 'S03E33', fileId: '185Gr9pze3-Fd4weMPkQ6M2ElJnZaEvMi', thumbnail: 'thumbs/episode 33.jpg' },
-            { title: 'Mini Bluey', episode: 'S03E06', fileId: '1QqWmjlFg3gzFnWiTS8fiH3w7QHHf5eQ7', thumbnail: 'thumbs/episode 6.jpg' },
-            { title: 'Granny Mobile', episode: 'S03E34', fileId: '1_kOoauVWS5HdgJqZWZuLUkGx9hhoZMwp', thumbnail: 'thumbs/episode 34.jpg' },
-            { title: 'Exercise', episode: 'S03E39', fileId: '1VXAc1sAz-aBnfj26YhmqjVwmIS8hZfq7', thumbnail: 'thumbs/episode 39.jpg' },
-            { title: 'Show and Tell', episode: 'S03E42', fileId: '1d1D43_L5rydXUlczu2cLb8SnQ0Yk1cQP', thumbnail: 'thumbs/episode 42.jpg' },
-            { title: 'Family Meeting', episode: 'S03E27', fileId: '1pCg3ghEUWukyBGjxgreR593f4vcnrij3', thumbnail: 'thumbs/episode 27.jpg' },
-            { title: 'Cricket', episode: 'S03E47', fileId: '1v97dN9WM7clW5SotDwF0ZYsmxoPm8yX0', thumbnail: 'thumbs/episode 47.jpg' },
-            { title: 'Driving', episode: 'S03E20', fileId: '11T_qCdaOU4O6T6q2KFAqzgpC1_wSONsD', thumbnail: 'thumbs/episode 20.jpg' },
-            { title: 'Onesies', episode: 'S03E32', fileId: '1IyMigZMHkwBPHIzjhqrzRzLY7yCgE4dk', thumbnail: 'thumbs/episode 32.jpg' },
-            { title: 'TV Shop', episode: 'S03E45', fileId: '1bEQ6P2GXsjQDFcRwZym8iWBehRa99U4K', thumbnail: 'thumbs/episode 45.jpg' },
-            { title: 'The Sign', episode: 'S03E49', fileId: '1LJos9I6YDq2wcm7CQJQCH5MQ3VgiSLcY', thumbnail: 'thumbs/episode 49.jpg' },
-            { title: 'Phones', episode: 'S03E16', fileId: '122-V3YDtvPJkq6fuv-2JqStbwWf0o1hL', thumbnail: 'thumbs/episode 16.jpg' },
-            { title: 'Born Yesterday', episode: 'S03E05', fileId: '13xCiNkNrbCSeMS5hUYnpMtDImTaEuHCX', thumbnail: 'thumbs/episode 5.jpg' },
-            { title: 'Dragon', episode: 'S03E43', fileId: '1Iaefbn0Fl0d3hHPl6nEEEnxZaZkMBj7y', thumbnail: 'thumbs/episode 43.jpg' },
-            { title: 'Housework', episode: 'S03E12', fileId: '18mVA-fV7bl5D5FcjOf-8eyaj1LZ5DV3a', thumbnail: 'thumbs/episode 12.jpg' },
-            { title: 'Whale Watching', episode: 'S03E22', fileId: '1D5VTyzo4WsJPRR5PCFhAg77rznn_ZvZR', thumbnail: 'thumbs/episode 22.jpg' },
-            { title: 'Pass the Parcel', episode: 'S03E13', fileId: '1cnlnNnDV2IMAakZNNFsyzxb_wywRALst', thumbnail: 'thumbs/episode 13.jpg' },
-            { title: 'Stickbird', episode: 'S03E41', fileId: '1uVGGk0fuJ2DYwCg_LawmMrVQPinQme5T', thumbnail: 'thumbs/episode 41.jpg' },
-            { title: 'Tina', episode: 'S03E21', fileId: '1IuVygJWaucfu614bFZ92JbLCUPyjX3Dh', thumbnail: 'thumbs/episode 21.jpg' },
-            { title: 'Space', episode: 'S03E35', fileId: '1iM0C1up_cph_wnNS9IomVPsDDNbOP9RL', thumbnail: 'thumbs/episode 35.jpg' },
-            { title: 'Stories', episode: 'S03E29', fileId: '1mtBNqKtukaGlClypZ4zo6ttfw4CK9R6N', thumbnail: 'thumbs/episode 29.jpg' },
-            { title: 'Obstacle Course', episode: 'S03E02', fileId: '16648XnCVUkNCuk2Tf-_4DaoAlWXHrKie', thumbnail: 'thumbs/episode 2.jpg' },
-            { title: 'Ghostbasket', episode: 'S03E48', fileId: '1GFwONZeaO0wtAsJTEUEMxA9HnbDZAwC4', thumbnail: 'thumbs/episode 48.jpg' },
-            { title: 'The Decider', episode: 'S03E37', fileId: '1VP86KKM3d0jMK6Xq2H_EZutT4Mb3lDe4', thumbnail: 'thumbs/episode 37.jpg' },
-            { title: 'Smoochy Kiss', episode: 'S03E26', fileId: '1bNB36hUd66y6NKaDKAenAquOMZnfzO3Z', thumbnail: 'thumbs/episode 26.jpg' },
-            { title: 'Explorers', episode: 'S03E15', fileId: '18O4DYzTvq0N-rusM1-nOdO8oHEoqxXoU', thumbnail: 'thumbs/episode 15.jpg' },
-            { title: 'Wild Girls', episode: 'S03E44', fileId: '1L-t5o_wCW3M_EubT-RbvOu6e67R8mEiH', thumbnail: 'thumbs/episode 44.jpg' },
-            { title: 'Perfect', episode: 'S03E14', fileId: '1zs3_zVTsVqY3mmucepjwZ6h-sdjO1MXg', thumbnail: 'thumbs/episode 14.jpg' },
-            { title: 'Faceytalk', episode: 'S03E23', fileId: '1H-mnExg0BWZfu_rF8yfDmiBOQLN9FC_Z', thumbnail: 'thumbs/episode 23.jpg' },
-            { title: 'Bedroom', episode: 'S03E01', fileId: '1MTF0XPiHh9puJ4nW8nK5miX2RGDBx14U', thumbnail: 'thumbs/episode 1.jpg' },
-            { title: 'Pavlova', episode: 'S03E17', fileId: '1kA_xgNIbLGV5g6J6Fg3_q73HMjKfvrqD', thumbnail: 'thumbs/episode 17.jpg' },
-            { title: 'Sheepdog', episode: 'S03E11', fileId: '1sS0sdvBh1H4Xp4qTY-oqXosWt67enu_J', thumbnail: 'thumbs/episode 11.jpg' },
-            { title: 'Puppets', episode: 'S03E30', fileId: '13aDvvj7VaPVRsfJJBmQ2lgk5hXxid3hN', thumbnail: 'thumbs/episode 30.jpg' },
-            { title: 'Musical Statues', episode: 'S03E28', fileId: '1PuzLhIN2kU6EaVP1K4T5vcTEmRb70YPs', thumbnail: 'thumbs/episode 28.jpg' },
-            { title: 'Fairytale', episode: 'S03E25', fileId: '1RFdKA8UyuPwjSNAQDcni48H_HKEL1Bzy', thumbnail: 'thumbs/episode 25.jpg' },
-            { title: 'Turtleboy', episode: 'S03E31', fileId: '1bWyiwoPMcTiqTTFAhF8xreQhLIyeFdJW', thumbnail: 'thumbs/episode 31.jpg' },
-            { title: 'Pizza Girls', episode: 'S03E19', fileId: '10iaMsPXEAvwUepmHaDgXI3RA58Sgp-MZ', thumbnail: 'thumbs/episode 19.jpg' },
-            { title: 'Chest', episode: 'S03E10', fileId: '1latxCbTCKHZmXUPVQ-IX-XHIsXgNqP9f', thumbnail: 'thumbs/episode 10.jpg' },
-            { title: 'Ragdoll', episode: 'S03E24', fileId: '1xU3naJU6ZeqkjxRfOH023gF607vjDky7', thumbnail: 'thumbs/episode 24.jpg' },
-            { title: 'Curry Quest', episode: 'S03E08', fileId: '1-oikkNB6ou8kLWIECUjLVzsoacLnqa37', thumbnail: 'thumbs/episode 8.jpg' },
-            { title: 'Surprise', episode: 'S03E50', fileId: '14ICtsW6r0YGnhritE-HjDCxaPgqzgSTQ', thumbnail: 'thumbs/episode 50.jpg' }
+            { title: 'Bedroom', episode: 'S03E01', embedUrl: 'https://jumpshare.com/embed/Em6mbdVsCZsb8t5oOrSD', thumbnail: 'thumbs/episode 1.jpg' },
+            { title: 'Obstacle Course', episode: 'S03E02', embedUrl: 'https://jumpshare.com/embed/ZcZ3wj6gMLqUhauWi99s', thumbnail: 'thumbs/episode 2.jpg' },
+            { title: 'Promises', episode: 'S03E03', embedUrl: 'https://jumpshare.com/embed/D2kfWhNM6GrRCQz3bZcw', thumbnail: 'thumbs/episode 3.jpg' },
+            { title: 'Omelette', episode: 'S03E04', embedUrl: 'https://jumpshare.com/embed/d3empEe0i9Q0uA1dH7XH', thumbnail: 'thumbs/episode 4.jpg' },
+            { title: 'Born Yesterday', episode: 'S03E05', embedUrl: 'https://jumpshare.com/embed/aqpcv12wLfmEGmo4gj3k', thumbnail: 'thumbs/episode 5.jpg' },
+            { title: 'Mini Bluey', episode: 'S03E06', embedUrl: 'https://jumpshare.com/embed/ogdJkXhWiWOTyaAXNfRQ', thumbnail: 'thumbs/episode 6.jpg' },
+            { title: 'Unicorse', episode: 'S03E07', embedUrl: 'https://jumpshare.com/embed/7i0aK6I4KdbKHjUvZS8X', thumbnail: 'thumbs/episode 7.jpg' },
+            { title: 'Curry Quest', episode: 'S03E08', embedUrl: 'https://jumpshare.com/embed/mj517qOfUE2iF92BD2l6', thumbnail: 'thumbs/episode 8.jpg' },
+            { title: 'Magic', episode: 'S03E09', embedUrl: 'https://jumpshare.com/embed/WAmEzSC3I2UADt1tDXBT', thumbnail: 'thumbs/episode 9.jpg' },
+            { title: 'Chest', episode: 'S03E10', embedUrl: 'https://jumpshare.com/embed/mxlAepmCg8DYlDVnBuwE', thumbnail: 'thumbs/episode 10.jpg' },
+            { title: 'Sheepdog', episode: 'S03E11', embedUrl: 'https://jumpshare.com/embed/YLCjzzpQYIf4vr5kMdx8', thumbnail: 'thumbs/episode 11.jpg' }
         ];
 
+        // Generate video cards
         const grid = document.getElementById('videoGrid');
         episodes.forEach(episode => {
             const card = document.createElement('div');
             card.className = 'video-card';
-            card.onclick = () => openModal(`https://drive.google.com/file/d/${episode.fileId}/preview`);
+            card.onclick = () => openModal(episode);
             card.innerHTML = `
                 <div class="video-overlay">
                     <img src="${episode.thumbnail}" class="video-thumbnail" loading="lazy" alt="${episode.title}">
                     <div class="play-overlay">
-                        <button class="play-button">▶ ${episode.title}</button>
+                        <button class="play-button">▶</button>
                     </div>
                 </div>
                 <div class="video-info">
@@ -288,30 +263,41 @@
             grid.appendChild(card);
         });
 
-        function openModal(url) {
-            document.getElementById('videoPlayer').src = url + '?autoplay=1&mute=0&rm=minimal';
-            document.getElementById('modal').classList.add('active');
+        function openModal(episode) {
+            const modal = document.getElementById('modal');
+            const player = document.getElementById('videoPlayer');
+            
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            document.getElementById('volumeSlider').value = 2;
+            
+            // Set the Jumpshare embed URL
+            player.src = episode.embedUrl;
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.getElementById('videoPlayer').src = '';
+            const modal = document.getElementById('modal');
+            const player = document.getElementById('videoPlayer');
+            
+            modal.classList.remove('active');
             document.body.style.overflow = 'auto';
+            
+            // Clear the iframe source to stop playback
+            player.src = '';
         }
 
-        document.getElementById('modal').onclick = e => e.target === document.getElementById('modal') && closeModal();
-        document.onkeydown = e => e.key === 'Escape' && closeModal();
+        // Close modal when clicking outside
+        document.getElementById('modal').onclick = e => {
+            if (e.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        };
 
-        function setVolume(v) {
-            const iframe = document.getElementById('videoPlayer');
-            iframe.contentWindow.postMessage({ type: 'setVolume', volume: v }, '*');
-        }
-
-        function maxVolume() {
-            setVolume(2);
-        }
+        // Close modal with Escape key
+        document.onkeydown = e => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        };
     </script>
 </body>
 
