@@ -23,6 +23,36 @@
             text-align: center;
             color: white;
             margin-bottom: 40px;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
         }
 
         .header h1 {
@@ -194,6 +224,16 @@
                 font-size: 2em;
             }
 
+            .back-button {
+                position: static;
+                transform: none;
+                margin-bottom: 15px;
+            }
+
+            .back-button:hover {
+                transform: scale(1.05);
+            }
+
             .video-grid {
                 grid-template-columns: 1fr;
             }
@@ -207,6 +247,7 @@
 
 <body>
     <div class="header">
+        <a href="index.html" class="back-button">Back</a>
         <h1>🐾 Watch Bluey 🐾</h1>
         <p>Season 3 - 11 Episodes | Jumpshare Streaming</p>
     </div>
